@@ -2,11 +2,12 @@
  * Helper utility for document printing and direct PDF generation across browsers,
  * iframe sandboxes (such as AI Studio embedded preview), and mobile devices.
  */
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { jsPDF } from 'jspdf';
 
 /**
- * Downloads a DOM element directly as an A4 PDF file using html2canvas & jsPDF.
+ * Downloads a DOM element directly as an A4 PDF file using html2canvas-pro & jsPDF.
+ * html2canvas-pro supports modern CSS color functions including oklab() and oklch().
  * This bypasses browser print dialog / iframe sandbox restrictions completely.
  */
 export async function downloadElementAsPdf(
@@ -28,7 +29,7 @@ export async function downloadElementAsPdf(
       return false;
     }
 
-    // Render canvas from target DOM element
+    // Render canvas from target DOM element using html2canvas-pro
     const canvas = await html2canvas(el, {
       scale: 2, // High DPI for clear text
       useCORS: true,
@@ -36,27 +37,28 @@ export async function downloadElementAsPdf(
       backgroundColor: '#ffffff',
       windowWidth: 800,
       onclone: (clonedDoc) => {
-        // html2canvas doesn't support oklch() colors used by Tailwind CSS v4.
-        // We inject a style override into the cloned document to force standard colors
-        // for the elements being captured.
+        // Inject clean print styles into cloned document
         const style = clonedDoc.createElement('style');
         style.innerHTML = `
-          /* Force standard colors to avoid html2canvas oklch parsing errors */
-          .official-doc, .document-sheet, .print-document, .official-doc * {
-            color: #000000 !important;
-            border-color: #000000 !important;
-            /* Allow backgrounds but ensure they are not using oklch if possible */
+          /* Hide interactive/toolbar elements in PDF */
+          .print\\:hidden, button, .no-print {
+            display: none !important;
           }
+          
+          /* Clean white background and solid borders for documents */
           .official-doc, .document-sheet, .print-document {
             background-color: #ffffff !important;
+            box-shadow: none !important;
+            border-color: #e2e8f0 !important;
           }
-          /* Ensure red accents still work if they were using red-600 oklch */
+          
+          /* Force solid standard colors to avoid any edge cases */
           .text-red-600 { color: #dc2626 !important; }
           .bg-red-600 { background-color: #dc2626 !important; }
           .border-red-600 { border-color: #dc2626 !important; }
           
-          /* Common Tailwind colors used in the app */
           .text-slate-900 { color: #0f172a !important; }
+          .text-slate-800 { color: #1e293b !important; }
           .text-slate-700 { color: #334155 !important; }
           .text-slate-600 { color: #475569 !important; }
           .text-slate-500 { color: #64748b !important; }
@@ -86,8 +88,8 @@ export async function downloadElementAsPdf(
     pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
     heightLeft -= pdfHeight;
 
-    // Multi-page document handling
-    while (heightLeft > 0) {
+    // Multi-page document handling (buffer of 5mm to prevent stray blank pages)
+    while (heightLeft > 5) {
       position = heightLeft - imgHeight;
       pdf.addPage();
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);

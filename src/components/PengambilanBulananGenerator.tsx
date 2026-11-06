@@ -216,7 +216,10 @@ export const PengambilanBulananGenerator: React.FC<PengambilanBulananGeneratorPr
 
   const handleDownloadPdf = async () => {
     setIsDownloadingPdf(true);
-    await downloadElementAsPdf('.official-doc', `Surat_Pengambilan_Operasional_RT_${profile.rtNumber}_${periodeLabel.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+    const success = await downloadElementAsPdf('.official-doc', `Surat_Pengambilan_Operasional_RT_${profile.rtNumber}_${periodeLabel.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+    if (!success) {
+      executePrint(`Surat Pengambilan Operasional RT ${profile.rtNumber} - ${periodeLabel}`);
+    }
     setIsDownloadingPdf(false);
   };
 

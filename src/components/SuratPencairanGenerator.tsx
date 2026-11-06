@@ -125,7 +125,10 @@ export const SuratPencairanGenerator: React.FC<SuratPencairanGeneratorProps> = (
 
   const handleDownloadPdf = async () => {
     setIsDownloadingPdf(true);
-    await downloadElementAsPdf('.official-doc', `Surat_Permohonan_Pencairan_RT_${profile.rtNumber}_RW_${profile.rwNumber}.pdf`);
+    const success = await downloadElementAsPdf('.official-doc', `Surat_Permohonan_Pencairan_RT_${profile.rtNumber}_RW_${profile.rwNumber}.pdf`);
+    if (!success) {
+      executePrint(`Surat Permohonan Pencairan BOP RT ${profile.rtNumber} - ${nomorSurat}`);
+    }
     setIsDownloadingPdf(false);
   };
 

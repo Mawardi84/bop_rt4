@@ -217,7 +217,11 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({
 
   const handleDownloadPdf = async () => {
     setIsDownloadingPdf(true);
-    await downloadElementAsPdf('.official-doc', `Laporan_BOP_RT_${currentMonthInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_${profile.year}.pdf`);
+    const docTitle = `Laporan_BOP_RT_${currentMonthInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_${profile.year}`;
+    const success = await downloadElementAsPdf('.official-doc', `${docTitle}.pdf`);
+    if (!success) {
+      executePrint(`Laporan Pertanggungjawaban BOP RT - ${currentMonthInfo.name} ${profile.year}`);
+    }
     setIsDownloadingPdf(false);
   };
 

@@ -52,8 +52,15 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         const idx = parsed.findIndex(p => p.id === dp.id);
         if (idx === -1) {
           parsed.push(dp);
-        } else if (dp.id === 'notulen-karnaval-30agustus') {
-          // Always update notulen-karnaval-30agustus with the latest preset data
+        } else if (
+          dp.id === 'notulen-karnaval-30agustus' ||
+          dp.id === 'notulen-kerjabakti-toga-11oktober' ||
+          dp.id === 'notulen-kerjabakti-biopori-1november' ||
+          dp.id === 'notulen-november' ||
+          dp.id === 'notulen-oktober' ||
+          dp.id === 'notulen-september'
+        ) {
+          // Always update with the latest preset data
           parsed[idx] = dp;
         }
       });
@@ -166,6 +173,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
   const getIndonesianDayName = (dateStr: string) => {
     try {
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        return days[d.getDay()];
+      }
       const d = new Date(dateStr);
       if (isNaN(d.getTime())) return 'Hari H';
       const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -195,12 +208,16 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
   // Helper untuk mempersingkat uraian pembahasan dan hasil keputusan agar pas 1 halaman
   const handlePersingkatUraian = () => {
-    if (selectedPresetId === 'notulen-karnaval-30agustus') {
-      const karnavalPreset = rtNotulenPresets.find((p) => p.id === 'notulen-karnaval-30agustus');
-      if (karnavalPreset) {
-        setDiscussionNotes(karnavalPreset.discussionNotes);
-        setDecisions(karnavalPreset.decisions);
-        setAgendaItems([...karnavalPreset.agendaItems]);
+    if (
+      selectedPresetId === 'notulen-karnaval-30agustus' || 
+      selectedPresetId === 'notulen-kerjabakti-toga-11oktober' ||
+      selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+    ) {
+      const matchPreset = rtNotulenPresets.find((p) => p.id === selectedPresetId);
+      if (matchPreset) {
+        setDiscussionNotes(matchPreset.discussionNotes);
+        setDecisions(matchPreset.decisions);
+        setAgendaItems([...matchPreset.agendaItems]);
         return;
       }
     }
@@ -286,13 +303,29 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         ? 'Malam Resepsi HUT RI Ke 81 Tahun 2026'
         : preset.id === 'notulen-karnaval-30agustus'
         ? 'Karnaval Budaya HUT RI Ke 81 Tahun 2026'
+        : preset.id === 'notulen-kerjabakti-toga-11oktober'
+        ? 'Kerja Bakti Taman TOGA RT 04'
+        : preset.id === 'notulen-kerjabakti-biopori-1november'
+        ? 'Kerja Bakti Pembuatan Lubang Biopori'
         : preset.agendaItems[1] || preset.agendaItems[0])
     );
     if (preset.id === 'notulen-karnaval-30agustus') {
       setUndanganCatatan('1. Rute Karnaval: Start di Lapangan Morokono dan Finish di Jalan Baru Gunungpati (Kumpul pukul 13.00 WIB).\n2. Karnaval mewakili kontingen RW 04 (Kp. Ngabean), dengan pembiayaan operasional didukung anggaran BOP RT 04.\n3. Hasil Kejuaraan: Juara 1 Kategori Wali Kota Semarang (RW 04 Kp. Ngabean) & Juara 2 Kategori Kelurahan Gunungpati (RW 04 Kp. Ngabean).\n4. Ibu Wali Kota Semarang memberikan tambahan Hadiah Uang Pembinaan kepada seluruh kontingen peserta karnaval.\n5. Dresscode: Pakaian Adat Nusantara / Baju Kreasi Budaya / Kaos Kemerdekaan RT 04.');
+    } else if (preset.id === 'notulen-kerjabakti-toga-11oktober') {
+      setUndanganCatatan('1. Waktu pelaksanaan: Minggu, 11 Oktober 2026 pukul 07.00 WIB s/d selesai di Taman TOGA RT 04.\n2. Dimohon warga membawa peralatan kerja bakti seperlunya (cangkul, sabit, gunting dahan, ember, sapu lidi).\n3. Konsumsi makan & minum kerja bakti disediakan oleh panitia menggunakan alokasi dana BOP RT Tahun Anggaran 2026.');
+    } else if (preset.id === 'notulen-kerjabakti-biopori-1november') {
+      setUndanganCatatan('1. Waktu pelaksanaan: Minggu, 1 November 2026 mulai pukul 07.00 WIB s/d selesai.\n2. Titik kumpul: Depan Pos Ronda RT 04 / Balai Warga Ngabean.\n3. Area kegiatan: Lingkungan RT 04 RW 04 Ngabean Gunungpati (titik rawan genangan dan halaman warga).\n4. Dimohon warga membawa peralatan kerja bakti seperlunya (linggis, cangkul, sekop, ember).\n5. Konsumsi kerja bakti disediakan oleh panitia menggunakan alokasi dana BOP RT Tahun Anggaran 2026.');
     } else {
       setUndanganCatatan('');
     }
+    // Reset custom letter overrides to show this preset's default values
+    setUndanganHalCustom('');
+    setUndanganAcaraCustom('');
+    setUndanganPengantarCustom('');
+    setUndanganPenutupCustom('');
+    setUndanganNomorCustom('');
+    setUndanganDateCustom('');
+
     if (preset.participantCount >= 50) {
       setTableLayoutMode('2-kolom-100');
     } else {
@@ -304,6 +337,10 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
     let base = selectedPresetId.replace('pkk-', '');
     if (base === 'notulen-tirakatan-16agustus' || base === 'notulen-resepsi-23agustus' || base === 'notulen-karnaval-30agustus') {
       base = 'notulen-agustus';
+    } else if (base === 'notulen-kerjabakti-toga-11oktober') {
+      base = 'notulen-oktober';
+    } else if (base === 'notulen-kerjabakti-biopori-1november') {
+      base = 'notulen-november';
     }
     const targetId = type === 'pkk' ? `pkk-${base}` : base;
     setMeetingType(type);
@@ -469,7 +506,10 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
   const handleDownloadPdf = async () => {
     setIsDownloadingPdf(true);
     const docName = docViewMode === 'daftar-hadir' ? 'Daftar_Hadir' : docViewMode === 'undangan' ? 'Surat_Undangan' : 'Notulen_Rapat';
-    await downloadElementAsPdf('.print-one-page, .document-sheet, .official-doc', `${docName}_RT04_${month}_${profile.year}.pdf`);
+    const success = await downloadElementAsPdf('.official-doc, .document-sheet, .print-one-page', `${docName}_RT04_${month}_${profile.year}.pdf`);
+    if (!success) {
+      executePrint(`${docName} - ${month} ${profile.year}`);
+    }
     setIsDownloadingPdf(false);
   };
 
@@ -487,6 +527,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         ? `Undangan Malam Tirakatan HUT RI Ke-81`
         : selectedPresetId === 'notulen-resepsi-23agustus'
         ? `Undangan Malam Resepsi HUT RI Ke-81`
+        : selectedPresetId === 'notulen-kerjabakti-toga-11oktober'
+        ? `Undangan Kerja Bakti Taman TOGA RT 04`
+        : selectedPresetId === 'notulen-oktober'
+        ? `Undangan Pertemuan Rutin & Pembuatan Lubang Biopori RT 04`
+        : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+        ? `Undangan Kerja Bakti Pembuatan Lubang Biopori RT 04`
         : `Undangan Pertemuan Rutin Warga RT ${profile.rtNumber} RW ${profile.rwNumber}`)
     : `Undangan Pertemuan Rutin PKK RT ${profile.rtNumber} RW ${profile.rwNumber}`;
   const currentHalSurat = undanganHalCustom || defaultHalSurat;
@@ -501,6 +547,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
   const defaultPengantar = meetingType === 'rt'
     ? (selectedPresetId === 'notulen-karnaval-30agustus'
         ? `Sehubungan dengan akan dilaksanakannya Pelaksanaan Kegiatan Karnaval Budaya HUT RI Ke-81 dengan rute Start di Lapangan Morokono dan Finish di Jalan Baru Gunungpati (dimana RT 04 mengirimkan kontingen resmi mewakili RW 04 Kp. Ngabean yang didukung alokasi dana BOP RT), maka dengan ini kami mengundang Bapak/Ibu Warga RT. ${profile.rtNumber} RW. ${profile.rwNumber} untuk hadir, berkumpul, dan berpartisipasi aktif dalam kegiatan karnaval budaya yang akan dilaksanakan pada :`
+        : selectedPresetId === 'notulen-kerjabakti-toga-11oktober'
+        ? `Sehubungan dengan pelaksanaan kegiatan gotong royong kerja bakti penataan, pemupukan, dan perawatan Taman TOGA RT 04 yang didukung alokasi anggaran Bantuan Operasional RT (BOP RT) Tahun Anggaran 2026, maka dengan ini kami mengundang Bapak/Ibu Warga RT. ${profile.rtNumber} RW. ${profile.rwNumber} untuk hadir dan bergotong-royong bersama dalam kegiatan kerja bakti yang akan dilaksanakan pada :`
+        : selectedPresetId === 'notulen-oktober'
+        ? `Sehubungan dengan akan dilaksanakannya pertemuan rutin warga Ngabean RT. ${profile.rtNumber} RW. ${profile.rwNumber} dengan agenda sosialisasi dan koordinasi pembuatan lubang biopori di lingkungan RT 04, maka dengan ini kami mengundang Bapak/Ibu untuk menghadiri acara tersebut yang akan dilaksanakan pada :`
+        : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+        ? `Sehubungan dengan pelaksanaan kegiatan gotong royong kerja bakti pembuatan lubang resapan biopori di lingkungan RT 04 RW 04 Ngabean Gunungpati yang didukung anggaran Bantuan Operasional RT (BOP RT) Tahun Anggaran 2026, maka dengan ini kami mengundang Bapak/Ibu Warga RT. ${profile.rtNumber} RW. ${profile.rwNumber} untuk hadir dan bergotong-royong bersama dalam kegiatan kerja bakti yang akan dilaksanakan pada :`
         : `Sehubungan dengan akan dilaksanakannya pertemuan rutin warga Ngabean RT. ${profile.rtNumber} RW. ${profile.rwNumber}   maka dengan ini kami mengundang Bapak/Ibu  untuk menghadiri acara tersebut  yang akan dilaksanakan pada :`)
     : `Sehubungan dengan akan dilaksanakannya pertemuan rutin PKK warga Ngabean RT. ${profile.rtNumber} RW. ${profile.rwNumber}   maka dengan ini kami mengundang Ibu-Ibu  untuk menghadiri acara tersebut  yang akan dilaksanakan pada :`;
   const currentPengantar = undanganPengantarCustom || defaultPengantar;
@@ -512,6 +564,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         ? 'Malam Resepsi HUT RI Ke 81'
         : selectedPresetId === 'notulen-karnaval-30agustus'
         ? 'Pelaksanaan Kegiatan Karnaval Budaya HUT RI Ke-81 (Start Lapangan Morokono - Finish Jalan Baru Gunungpati)'
+        : selectedPresetId === 'notulen-kerjabakti-toga-11oktober'
+        ? 'Kerja Bakti Taman TOGA RT 04'
+        : selectedPresetId === 'notulen-oktober'
+        ? `Pertemuan Rutin RT. ${profile.rtNumber} (Pembahasan Biopori)`
+        : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+        ? 'Kerja Bakti Pembuatan Lubang Biopori'
         : `Pertemuan rutin  RT. ${profile.rtNumber}`)
     : `Pertemuan rutin  PKK RT. ${profile.rtNumber}`;
   const currentAcara = undanganAcaraCustom || defaultAcara;
@@ -885,6 +943,13 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     {preset.id === 'notulen-tirakatan-16agustus' ? '16 Ags (Tirakatan)' :
                      preset.id === 'notulen-resepsi-23agustus' ? '23 Ags (Resepsi)' :
                      preset.id === 'notulen-karnaval-30agustus' ? '30 Ags (Karnaval)' :
+                     preset.id === 'notulen-september' ? '7 Sep (TOGA)' :
+                     preset.id === 'notulen-oktober' ? '8 Okt (Biopori)' :
+                     preset.id === 'notulen-kerjabakti-toga-11oktober' ? '11 Okt (Kerja Bakti)' :
+                     preset.id === 'notulen-kerjabakti-biopori-1november' ? '1 Nov (Biopori)' :
+                     preset.id === 'notulen-november' ? '8 Nov (Rapat)' :
+                     preset.id === 'pkk-notulen-september' ? 'PKK Sep' :
+                     preset.id === 'pkk-notulen-oktober' ? 'PKK Okt' :
                      `${idx + 1}. ${preset.month}`}
                   </div>
                   <div className="text-[11px] font-extrabold leading-tight mt-0.5 truncate" title={preset.agendaTitle || preset.agendaItems[0]}>
@@ -897,10 +962,16 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                         preset.month === 'Mei' ? 'Taman TOGA PKK' :
                         preset.month === 'Juni' ? 'Zarkasi Jogja' :
                         preset.month === 'Juli' ? 'Sosialisasi BOP' :
-                        preset.month === 'Agustus' ? 'HUT RI Ke-81' : 'Rapat Rutin'
+                        preset.month === 'Agustus' ? 'HUT RI Ke-81' :
+                        preset.month === 'September' ? 'Perawatan TOGA' :
+                        preset.month === 'Oktober' ? 'Kerja Bakti / Biopori' :
+                        preset.month === 'November' ? (preset.id === 'notulen-kerjabakti-biopori-1november' ? 'Kerja Bakti Biopori' : 'Evaluasi Biopori') :
+                        'Rapat Rutin'
                       ) : (
                         preset.month === 'Januari' ? 'Proker PKK' :
-                        preset.month === 'Pebruari' || preset.month === 'Maret' || preset.month === 'April' || preset.month === 'Mei' || preset.month === 'Juni' || preset.month === 'Juli' || preset.month === 'Agustus' ? 'Laporan Bulanan' : 'Pertemuan PKK'
+                        preset.month === 'September' ? 'Evaluasi PKK' :
+                        preset.month === 'Oktober' ? 'Hari Santri & BOP' :
+                        'Pertemuan PKK'
                       ))
                     }
                   </div>
@@ -929,7 +1000,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                 ? 'Pengaturan Daftar Hadir' 
                 : docViewMode === 'undangan'
                 ? (meetingType === 'rt' ? 'Pengaturan Surat Undangan RT' : 'Pengaturan Surat Undangan PKK')
-                : selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
+                : selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                 ? 'Formulir Berita Acara Pelaksanaan'
                 : 'Formulir Notulen Rapat'}
             </span>
@@ -1389,8 +1460,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
               {/* Judul Daftar Hadir */}
               <div className="text-center my-4">
                 <h1 className="text-base print:text-base font-black tracking-wider uppercase underline underline-offset-4 text-slate-900 leading-tight">
-                  {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
-                    ? agendaSummary.toUpperCase()
+                  {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+                    ? (selectedPresetId === 'notulen-kerjabakti-toga-11oktober' 
+                        ? `DAFTAR HADIR KERJA BAKTI PERAWATAN TAMAN TOGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
+                        : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+                        ? `DAFTAR HADIR KERJA BAKTI PEMBUATAN LUBANG BIOPORI RT ${profile.rtNumber} RW ${profile.rwNumber}`
+                        : agendaSummary.toUpperCase())
                     : (meetingType === 'rt' 
                       ? `DAFTAR HADIR RAPAT RUTIN WARGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
                       : `DAFTAR HADIR PERTEMUAN RUTIN PKK RT ${profile.rtNumber} RW ${profile.rwNumber}`)}
@@ -1550,7 +1625,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
               <div className="pt-2">
                 <div className="flex items-center justify-between mb-1">
                   <label className="block font-semibold text-slate-700 uppercase">
-                    {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
+                    {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                       ? 'Uraian Jalannya Acara & Pelaksanaan'
                       : 'Uraian Pembahasan Rapat'}
                   </label>
@@ -1609,7 +1684,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
               <div>
                 <label className="block font-semibold text-slate-700 uppercase mb-1">
-                  {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
+                  {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                     ? 'Hasil Pelaksanaan & Kesimpulan Acara'
                     : 'Hasil Keputusan Rapat'}
                 </label>
@@ -2153,8 +2228,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     DAFTAR HADIR WARGA
                   </h1>
                   <p className="text-[9.5px] print:text-[8.5px] font-extrabold uppercase mt-0.5 text-slate-800">
-                    {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
-                      ? agendaSummary.toUpperCase()
+                    {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+                      ? (selectedPresetId === 'notulen-kerjabakti-toga-11oktober' 
+                          ? `KERJA BAKTI TAMAN TOGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
+                          : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+                          ? `KERJA BAKTI PEMBUATAN BIOPORI RT ${profile.rtNumber} RW ${profile.rwNumber}`
+                          : agendaSummary.toUpperCase())
                       : meetingType === 'rt' 
                       ? `PERTEMUAN RUTIN WARGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
                       : `PERTEMUAN RUTIN PKK RT ${profile.rtNumber} RW ${profile.rwNumber}`}
@@ -2356,6 +2435,10 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                       ? 'BERITA ACARA & NOTULEN PELAKSANAAN MALAM RESEPSI HUT RI KE 81 TAHUN 2026'
                       : selectedPresetId === 'notulen-karnaval-30agustus'
                       ? 'BERITA ACARA & NOTULEN PELAKSANAAN KARNAVAL BUDAYA HUT RI KE 81 TAHUN 2026'
+                      : selectedPresetId === 'notulen-kerjabakti-toga-11oktober'
+                      ? `BERITA ACARA & NOTULEN PELAKSANAAN KERJA BAKTI TAMAN TOGA RT ${profile.rtNumber} RW ${profile.rwNumber} TAHUN 2026`
+                      : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+                      ? `BERITA ACARA & NOTULEN PELAKSANAAN KERJA BAKTI PEMBUATAN LUBANG BIOPORI RT ${profile.rtNumber} RW ${profile.rwNumber} TAHUN 2026`
                       : meetingType === 'rt' 
                       ? `NOTULEN RAPAT RUTIN WARGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
                       : `NOTULEN PERTEMUAN RUTIN PKK RT ${profile.rtNumber} RW ${profile.rwNumber}`}
@@ -2434,7 +2517,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                   }`}>
                     {!discussionNotes?.trim() && !decisions?.trim() 
                       ? 'Uraian Jalannya Acara'
-                      : selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
+                      : selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'I. Susunan Acara Pelaksanaan Kegiatan'
                         : 'I. Susunan Agenda / Acara Rapat'}
                   </div>
@@ -2467,7 +2550,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
                       isCompact ? 'text-[11px] print:text-[10px] py-0.5 px-2 border-l-2 mb-1' : 'text-sm print:text-sm py-1.5 px-2.5 border-l-4 mb-2'
                     }`}>
-                      {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
+                      {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'II. Uraian Jalannya Acara & Pelaksanaan Kegiatan'
                         : 'II. Uraian Pembahasan & Diskusi Rapat'}
                     </div>
@@ -2485,7 +2568,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
                       isCompact ? 'text-[11px] print:text-[10px] py-0.5 px-2 border-l-2 mb-1' : 'text-sm print:text-sm py-1.5 px-2.5 border-l-4 mb-2'
                     }`}>
-                      {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus'
+                      {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'III. Hasil Pelaksanaan Kegiatan & Kesimpulan'
                         : 'III. Hasil Keputusan & Kesepakatan Warga'}
                     </div>

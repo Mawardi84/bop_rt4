@@ -737,6 +737,26 @@ Seluruh operasional kontingen RT 04 didukung anggaran BOP RT 04 TA 2026. Ibu Wal
 3. Belanja operasional kontingen RT 04 (konsumsi, sound kirab, dan atribut) dipertanggungjawabkan dalam SPJ BOP RT Bulan Agustus 2026. Acara berlangsung tertib, aman, dan meriah.`
   },
   {
+    id: 'notulen-september',
+    month: 'September',
+    date: '2026-09-07',
+    time: '19:30 - selesai',
+    location: 'Kediaman Bp. Soim',
+    participantCount: 40,
+    leader: 'M. WAKHID NURJANAH',
+    secretary: 'MUH ZAENUN',
+    agendaTitle: 'Perawatan & Pemupukan Taman TOGA RT 04',
+    agendaItems: [
+      'Pembukaan oleh Pimpinan Rapat (Ketua RT 04 Bpk. M. WAKHID NURJANAH)',
+      'Evaluasi Keikutsertaan dan Kemenangan Karnaval Budaya HUT RI Ke-81',
+      'Perencanaan Perawatan & Pemupukan Tanaman Obat Keluarga (TOGA) RT 04',
+      'Alokasi Anggaran Pemeliharaan TOGA Sebesar Rp 1.000.000 dari BOP RT 2026',
+      'Penyusunan Jadwal Kerja Bakti dan Penutup'
+    ],
+    discussionNotes: 'Rapat rutin warga RT 04 dilaksanakan pada hari Senin, 7 September 2026 di kediaman Bp. Soim. Membahas evaluasi kesuksesan kegiatan HUT RI ke-81 serta perencanaan perawatan dan pemupukan Taman TOGA yang didukung anggaran BOP RT Tahun Anggaran 2026.',
+    decisions: '1. Anggaran BOP RT sebesar Rp 1.000.000 dialokasikan untuk perawatan dan pemupukan Taman TOGA RT 04.\n2. Warga sepakat melanjutkan gotong royong dan pemeliharaan apotek hidup RT 04.'
+  },
+  {
     id: 'notulen-oktober',
     month: 'Oktober',
     date: '2026-10-08',
@@ -756,6 +776,70 @@ Seluruh operasional kontingen RT 04 didukung anggaran BOP RT 04 TA 2026. Ibu Wal
     ],
     discussionNotes: 'Rapat rutin warga RT 04 dilaksanakan pada hari Kamis, 8 Oktober 2026 pukul 19.30 WIB bertempat di kediaman Bp. Ngadi. Pembahasan utama mengenai program pembuatan lubang biopori di titik-titik rawan genangan dan pekarangan warga guna meningkatkan daya serap air tanah serta pengelolaan sampah organik secara mandiri.\n\nBiaya pengadaan alat bor dan perlengkapan biopori didukung sepenuhnya dari alokasi Dana Bantuan Operasional RT (BOP) Tahun Anggaran 2026.',
     decisions: '1. Disepakati pelaksanaan kerja bakti pembuatan lubang biopori di wilayah RT 04 RW 04 Ngabean.\n2. Pembiayaan peralatan dan material dibebankan pada anggaran BOP RT 04 Tahun Anggaran 2026.\n3. Warga diimbau berpartisipasi aktif dalam perawatan lubang biopori di sekitar rumah masing-masing.'
+  },
+  {
+    id: 'notulen-kerjabakti-toga-11oktober',
+    month: 'Oktober',
+    date: '2026-10-11',
+    time: '07.00 WIB - selesai',
+    location: 'Taman Toga RT 04',
+    participantCount: 40,
+    leader: 'M. WAKHID NURJANAH',
+    secretary: 'MUH ZAENUN',
+    agendaTitle: 'Kerja Bakti Taman TOGA RT 04',
+    agendaItems: [
+      'Berkumpul di Taman Toga RT 04 dan Doa Bersama',
+      'Pembersihan Gulma, Rumput Liar, dan Penggemburan Tanah Apotek Hidup',
+      'Penanaman Bibit Tanaman Obat Baru serta Peremajaan Polybag',
+      'Pemupukan Organik dan Penyiraman Tanaman TOGA Secara Menyeluruh',
+      'Perbaikan dan Perapian Pagar Pembatas Taman Toga RT 04',
+      'Ramah Tamah dan Menikmati Konsumsi Kerja Bakti Bersama Warga',
+      'Evaluasi Hasil Kegiatan Kerja Bakti dan Penutup'
+    ],
+    discussionNotes: 'Kerja bakti pemeliharaan, penataan, dan perawatan Taman TOGA RT 04 diselenggarakan pada hari Minggu, 11 Oktober 2026 mulai pukul 07.00 WIB bertempat di Taman Toga RT 04 RW 04 Ngabean. Kegiatan gotong royong ini diikuti oleh warga RT 04 untuk merawat apotek hidup, menyuburkan tanaman herbal, serta menjaga kebersihan dan keasrian lingkungan RT 04.\n\nSeluruh sarana pemeliharaan, alat kebersihan, serta penyediaan konsumsi kerja bakti didukung penuh oleh anggaran Bantuan Operasional RT (BOP RT) Tahun Anggaran 2026.',
+    decisions: '1. Warga RT 04 telah melaksanakan kegiatan kerja bakti perawatan Taman Toga RT 04 secara gotong royong dengan tertib, bersih, dan lancar.\n2. Jadwal perawatan dan penyiraman harian Taman TOGA dikoordinasikan secara bergilir bersama kelompok Dasawisma dan PKK RT 04.\n3. Pembiayaan konsumsi kerja bakti dialokasikan dari anggaran Bantuan Operasional RT (BOP RT) Tahun Anggaran 2026.'
+  },
+  {
+    id: 'notulen-kerjabakti-biopori-1november',
+    month: 'November',
+    date: '2026-11-01',
+    time: '07.00 WIB - selesai',
+    location: 'Lingkungan RT 04 RW 04 Ngabean Gunungpati',
+    participantCount: 40,
+    leader: 'M. WAKHID NURJANAH',
+    secretary: 'MUH ZAENUN',
+    agendaTitle: 'Kerja Bakti Pembuatan Lubang Biopori',
+    agendaItems: [
+      'Berkumpul di Pos Ronda RT 04 / Titik Kumpul dan Doa Bersama',
+      'Pembagian Titik Lokasi Pengeboran Lubang Resapan Biopori di RT 04 RW 04',
+      'Pengeboran Tanah Menggunakan Alat Bor Manual & Pemasangan Pipa PVC Biopori',
+      'Pemasangan Tutup Biopori dan Pengisian Sampah Organik/Dedaunan Kering',
+      'Pembersihan Area Sekitar dan Pengecekan Aliran Air Resapan Hujan',
+      'Istirahat, Ramah Tamah, dan Menikmati Konsumsi Bersama Warga',
+      'Evaluasi Hasil Pembuatan Lubang Biopori dan Penutup'
+    ],
+    discussionNotes: 'Kerja bakti gotong royong pembuatan lubang resapan biopori di lingkungan RT 04 RW 04 Ngabean dilaksanakan pada hari Minggu, 1 November 2026 mulai pukul 07.00 WIB bertempat di lingkungan RT 04 RW 04 Ngabean Gunungpati. Kegiatan ini merupakan realisasi dari program kebersihan dan kelestarian lingkungan yang didukung penuh oleh alokasi anggaran Bantuan Operasional RT (BOP RT) Pemerintah Kota Semarang Tahun Anggaran 2026.\n\nWarga bersama-sama mengebor tanah sedalam 80-100 cm, memasang pipa PVC biopori berlubang, serta memasang penutup biopori di titik-titik rawan genangan air dan halaman pekarangan warga.',
+    decisions: '1. Pembuatan titik lubang biopori di lingkungan RT 04 RW 04 Ngabean Gunungpati berhasil dilaksanakan dengan lancar dan gotong royong.\n2. Warga diimbau untuk rutin memasukkan sampah organik rumah tangga ke dalam lubang biopori guna mempercepat resapan air dan pengomposan alami.\n3. Biaya perlengkapan pipa PVC, alat bor tanah, dan konsumsi kerja bakti dipertanggungjawabkan dalam SPJ Bantuan Operasional RT (BOP RT) Tahun Anggaran 2026.'
+  },
+  {
+    id: 'notulen-november',
+    month: 'November',
+    date: '2026-11-08',
+    time: '19:30 - selesai',
+    location: 'Kediaman Bp. Sukirno',
+    participantCount: 40,
+    leader: 'M. WAKHID NURJANAH',
+    secretary: 'MUH ZAENUN',
+    agendaTitle: 'Evaluasi Biopori & Persiapan Akhir Tahun',
+    agendaItems: [
+      'Pembukaan oleh Pimpinan Rapat (Ketua RT 04 Bpk. M. WAKHID NURJANAH)',
+      'Laporan Hasil Pelaksanaan Kerja Bakti Pembuatan Lubang Biopori 1 November 2026',
+      'Sosialisasi Ketertiban Lingkungan Menghadapi Musim Penghujan',
+      'Rencana Rekapitulasi Akhir Penggunaan Anggaran BOP RT Tahun 2026',
+      'Penutup dan Doa'
+    ],
+    discussionNotes: 'Rapat rutin warga RT 04 dilaksanakan pada hari Minggu, 8 November 2026 di kediaman Bp. Sukirno. Membahas evaluasi pembuatan lubang biopori serta persiapan administrasi SPJ akhir tahun anggaran 2026.',
+    decisions: '1. Seluruh lubang biopori yang terpasang berfungsi dengan baik dalam meresapkan air tanah.\n2. Warga sepakat menjaga kebersihan saluran drainase dan menyukseskan program akhir tahun.'
   }
 ];
 

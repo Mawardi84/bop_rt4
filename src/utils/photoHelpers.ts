@@ -237,6 +237,96 @@ export const getDefaultPhotosForMonth = (
     ];
   }
 
+  if (month.toLowerCase() === 'oktober') {
+    return [
+      {
+        id: `photo-oktober-1`,
+        title: 'Kerja Bakti Penataan Taman TOGA RT 04',
+        description: 'Warga RT 04 bergotong royong merawat, membersihkan gulma, dan menata tanaman obat keluarga di Taman TOGA RT 04.',
+        date: '11 Oktober 2026',
+        location: 'Taman Toga RT 04 Ngabean',
+        imageUrl: existingRecord?.meetingPhotoUrl || 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=800&q=80',
+        orientation: 'landscape',
+        fitMode: 'cover',
+      },
+      {
+        id: `photo-oktober-2`,
+        title: 'Sosialisasi Pembuatan Lubang Biopori',
+        description: 'Rapat koordinasi warga membahas titik pengeboran tanah dan pemasangan pipa resapan biopori.',
+        date: '8 Oktober 2026',
+        location: 'Kediaman Bp. Ngadi',
+        imageUrl: existingRecord?.itemPhotoUrl || 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+        orientation: 'landscape',
+        fitMode: 'cover',
+      },
+      {
+        id: `photo-oktober-3`,
+        title: 'Pengadaan Pipa PVC & Alat Bor Biopori',
+        description: 'Nota asli pembelanjaan pipa resapan biopori dan alat bor tanah yang didukung alokasi dana BOP RT 2026.',
+        date: '10 Oktober 2026',
+        location: 'Toko Perlengkapan Bangunan',
+        imageUrl: existingRecord?.receiptPhotoUrl || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+        orientation: 'portrait',
+        fitMode: 'contain',
+      },
+      {
+        id: `photo-oktober-4`,
+        title: 'Konsumsi Kerja Bakti Warga RT 04',
+        description: 'Penyediaan snack dan makan gotong royong kerja bakti warga dari anggaran operasional RT 04.',
+        date: '11 Oktober 2026',
+        location: 'Taman Toga RT 04',
+        imageUrl: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
+        orientation: 'landscape',
+        fitMode: 'cover',
+      },
+    ];
+  }
+
+  if (month.toLowerCase() === 'november') {
+    return [
+      {
+        id: `photo-november-1`,
+        title: 'Kerja Bakti Pembuatan Lubang Biopori RT 04',
+        description: 'Warga RT 04 bergotong royong mengebor tanah dan menanam pipa biopori resapan air hujan di lingkungan RT 04.',
+        date: '1 November 2026',
+        location: 'Lingkungan RT 04 RW 04 Ngabean',
+        imageUrl: existingRecord?.meetingPhotoUrl || 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=800&q=80',
+        orientation: 'landscape',
+        fitMode: 'cover',
+      },
+      {
+        id: `photo-november-2`,
+        title: 'Pemasangan Tutup Saringan Pipa Biopori',
+        description: 'Pemasangan pipa PVC berlubang dan penutup dop saringan untuk resapan air serta pengomposan sampah organik warga.',
+        date: '1 November 2026',
+        location: 'Lingkungan RT 04 RW 04 Ngabean',
+        imageUrl: existingRecord?.itemPhotoUrl || 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+        orientation: 'landscape',
+        fitMode: 'cover',
+      },
+      {
+        id: `photo-november-3`,
+        title: 'Pembelian Pipa PVC & Alat Bor Biopori',
+        description: 'Kwitansi / Nota pembelian pipa biopori, dop penutup, dan perlengkapan bor tanah menggunakan alokasi dana BOP RT 2026.',
+        date: '31 Oktober 2026',
+        location: 'Toko Bangunan & Teknik Gunungpati',
+        imageUrl: existingRecord?.receiptPhotoUrl || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+        orientation: 'portrait',
+        fitMode: 'contain',
+      },
+      {
+        id: `photo-november-4`,
+        title: 'Konsumsi Gotong Royong Kerja Bakti Biopori',
+        description: 'Snack dan konsumsi kerja bakti warga dalam pembuatan lubang biopori di lingkungan RT 04.',
+        date: '1 November 2026',
+        location: 'Lingkungan RT 04 RW 04',
+        imageUrl: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
+        orientation: 'landscape',
+        fitMode: 'cover',
+      },
+    ];
+  }
+
   // Generic fallback for other months
   return [
     {

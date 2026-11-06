@@ -21,7 +21,10 @@ export const SptjmGenerator: React.FC<SptjmGeneratorProps> = ({ profile }) => {
 
   const handleDownloadPdf = async () => {
     setIsDownloadingPdf(true);
-    await downloadElementAsPdf('.official-doc', `SPTJM_BOP_RT_${profile.rtNumber}_RW_${profile.rwNumber}.pdf`);
+    const success = await downloadElementAsPdf('.official-doc', `SPTJM_BOP_RT_${profile.rtNumber}_RW_${profile.rwNumber}.pdf`);
+    if (!success) {
+      executePrint(`SPTJM BOP RT ${profile.rtNumber} RW ${profile.rwNumber}`);
+    }
     setIsDownloadingPdf(false);
   };
 
