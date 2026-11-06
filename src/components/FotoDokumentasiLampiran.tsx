@@ -73,54 +73,71 @@ export const FotoDokumentasiLampiran: React.FC<FotoDokumentasiLampiranProps> = (
     localStorage.setItem('si_bop_show_photo_keterangan', JSON.stringify(next));
   };
 
+  const currentPhotos = photos && Array.isArray(photos) && photos.length > 0 
+    ? photos 
+    : getDefaultPhotosForMonth(month, profile.year);
+
   // Split photos into chunks of 2 or 4 according to selected layout
   const chunkSize = photosPerPage;
   const sheets: DocumentationPhoto[][] = [];
-  for (let i = 0; i < photos.length; i += chunkSize) {
-    sheets.push(photos.slice(i, i + chunkSize));
+  for (let i = 0; i < currentPhotos.length; i += chunkSize) {
+    sheets.push(currentPhotos.slice(i, i + chunkSize));
   }
 
   const handleToggleOrientation = (index: number) => {
-    const updated = [...photos];
-    const current = updated[index].orientation || 'landscape';
-    updated[index] = {
-      ...updated[index],
-      orientation: current === 'landscape' ? 'portrait' : 'landscape',
-    };
-    onUpdatePhotos(updated);
+    const updated = [...currentPhotos];
+    const current = updated[index]?.orientation || 'landscape';
+    if (updated[index]) {
+      updated[index] = {
+        ...updated[index],
+        orientation: current === 'landscape' ? 'portrait' : 'landscape',
+      };
+      onUpdatePhotos(updated);
+    }
   };
 
   const handleToggleFitMode = (index: number) => {
-    const updated = [...photos];
-    const current = updated[index].fitMode || 'cover';
-    updated[index] = {
-      ...updated[index],
-      fitMode: current === 'cover' ? 'contain' : 'cover',
-    };
-    onUpdatePhotos(updated);
+    const updated = [...currentPhotos];
+    const current = updated[index]?.fitMode || 'cover';
+    if (updated[index]) {
+      updated[index] = {
+        ...updated[index],
+        fitMode: current === 'cover' ? 'contain' : 'cover',
+      };
+      onUpdatePhotos(updated);
+    }
   };
 
   const handleFileUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Detect image natural orientation if possible, or read as DataURL
     const reader = new FileReader();
     reader.onload = (event) => {
       if (typeof event.target?.result === 'string') {
         const dataUrl = event.target.result;
-        
-        // Auto-detect orientation from image dimensions
         const img = new Image();
         img.onload = () => {
           const isVertical = img.naturalHeight > img.naturalWidth;
-          const updated = [...photos];
-          updated[index] = {
-            ...updated[index],
-            imageUrl: dataUrl,
-            orientation: isVertical ? 'portrait' : 'landscape',
-          };
-          onUpdatePhotos(updated);
+          const updated = [...currentPhotos];
+          if (updated[index]) {
+            updated[index] = {
+              ...updated[index],
+              imageUrl: dataUrl,
+              orientation: isVertical ? 'portrait' : 'landscape',
+            };
+            onUpdatePhotos(updated);
+          }
+        };
+        img.onerror = () => {
+          const updated = [...currentPhotos];
+          if (updated[index]) {
+            updated[index] = {
+              ...updated[index],
+              imageUrl: dataUrl,
+            };
+            onUpdatePhotos(updated);
+          }
         };
         img.src = dataUrl;
       }
@@ -129,16 +146,18 @@ export const FotoDokumentasiLampiran: React.FC<FotoDokumentasiLampiranProps> = (
   };
 
   const handleUpdateField = (index: number, field: keyof DocumentationPhoto, value: string) => {
-    const updated = [...photos];
-    updated[index] = {
-      ...updated[index],
-      [field]: value,
-    };
-    onUpdatePhotos(updated);
+    const updated = [...currentPhotos];
+    if (updated[index]) {
+      updated[index] = {
+        ...updated[index],
+        [field]: value,
+      };
+      onUpdatePhotos(updated);
+    }
   };
 
   const handleAddPhoto = () => {
-    const newNo = photos.length + 1;
+    const newNo = currentPhotos.length + 1;
     const newPhoto: DocumentationPhoto = {
       id: `photo-${Date.now()}`,
       title: `Foto ${newNo}: Dokumentasi Tambahan Bulan ${month}`,
@@ -149,17 +168,17 @@ export const FotoDokumentasiLampiran: React.FC<FotoDokumentasiLampiranProps> = (
       orientation: 'landscape',
       fitMode: 'cover',
     };
-    onUpdatePhotos([...photos, newPhoto]);
-    setActivePhotoIndex(photos.length);
+    onUpdatePhotos([...currentPhotos, newPhoto]);
+    setActivePhotoIndex(currentPhotos.length);
   };
 
   const handleDeletePhoto = (index: number) => {
-    if (photos.length <= 1) {
+    if (currentPhotos.length <= 1) {
       alert('Minimal harus ada 1 foto dokumentasi.');
       return;
     }
     if (window.confirm(`Hapus foto ke-${index + 1}?`)) {
-      const updated = photos.filter((_, idx) => idx !== index);
+      const updated = currentPhotos.filter((_, idx) => idx !== index);
       onUpdatePhotos(updated);
       setActivePhotoIndex(0);
     }
@@ -167,8 +186,8 @@ export const FotoDokumentasiLampiran: React.FC<FotoDokumentasiLampiranProps> = (
 
   const handleMovePhoto = (index: number, direction: 'up' | 'down') => {
     const targetIdx = direction === 'up' ? index - 1 : index + 1;
-    if (targetIdx < 0 || targetIdx >= photos.length) return;
-    const updated = [...photos];
+    if (targetIdx < 0 || targetIdx >= currentPhotos.length) return;
+    const updated = [...currentPhotos];
     const temp = updated[index];
     updated[index] = updated[targetIdx];
     updated[targetIdx] = temp;
@@ -659,110 +678,39 @@ export const FotoDokumentasiLampiran: React.FC<FotoDokumentasiLampiranProps> = (
                 </p>
               </div>
 
-              {/* Layout Content: 2 Foto vs 4 Foto */}
+              {/* Layout Content: 2 Foto vs 4 Foto (Plain Frames Only) */}
               {photosPerPage === 2 ? (
-                /* --- PILIHAN 1: FORMAT 2 FOTO PER LEMBAR (UKURAN BESAR POSTCARD 10X15 CM + RINCIAN) --- */
+                /* --- PILIHAN 1: FORMAT 2 FOTO PER LEMBAR (FRAME POLOS BESAR) --- */
                 <div className="space-y-4 flex-1 content-start mt-1">
                   {sheetPhotos.map((photo, photoInSheetIdx) => {
-                    const globalPhotoNumber = sheetIdx * 2 + photoInSheetIdx + 1;
-
                     return (
-// 2-Photo Mode Card Rendering
                       <div
                         key={photo.id || photoInSheetIdx}
-                        className="border border-slate-200 rounded-xl p-3.5 bg-white print:border-slate-300 print-avoid-break min-h-[102mm] max-h-[114mm] flex flex-col justify-between shadow-2xs print:shadow-none"
+                        className="border border-slate-300 rounded-xl p-3 bg-white print:border-slate-400 print-avoid-break h-[115mm] flex flex-col items-center justify-center overflow-hidden shadow-2xs print:shadow-none"
                       >
-                        {/* Top Bar for each photo */}
-                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200 text-xs">
-                          <div className="flex items-center space-x-2 truncate">
-                            <span className="bg-slate-900 text-white font-bold text-[10px] px-2 py-0.5 rounded-md shrink-0 tracking-wider">
-                              FOTO {globalPhotoNumber}
-                            </span>
-                            <span className="font-bold text-slate-900 text-xs sm:text-sm truncate">
-                              {photo.title || `Dokumentasi Kegiatan ${globalPhotoNumber}`}
-                            </span>
-                          </div>
-                          <div className="text-[10px] text-slate-600 font-medium shrink-0 flex items-center space-x-2">
-                            {photo.date && (
-                              <span className="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200 font-medium">
-                                📅 {photo.date}
-                              </span>
-                            )}
-                            {photo.location && (
-                              <span className="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200 font-medium hidden sm:inline">
-                                📍 {photo.location}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Side-by-Side Content: Foto Besar (Kiri) + Keterangan Lengkap (Kanan) */}
-                        <div className="flex flex-col sm:flex-row gap-3.5 flex-1 items-stretch">
-                          {/* Foto Container (Setara Postcard 10x15cm) */}
-                          <div className="w-full sm:w-[58%] h-[78mm] sm:h-[88mm] bg-slate-50/80 border border-slate-300 rounded-lg flex items-center justify-center overflow-hidden shrink-0 shadow-2xs print:shadow-none">
-                            {photo.imageUrl ? (
-                              <img
-                                src={photo.imageUrl}
-                                alt={photo.title}
-                                className={photo.fitMode === 'contain' ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover'}
-                              />
-                            ) : (
-                              <div className="text-center p-4 text-slate-400 text-xs">
-                                <Camera className="w-8 h-8 mx-auto mb-1 text-slate-300" />
-                                <span>Foto Belum Diunggah</span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Rincian Kegiatan di Kanan */}
-                          <div className="w-full sm:w-[42%] flex flex-col justify-start bg-slate-50/90 border border-slate-200 rounded-lg p-3.5 text-xs leading-relaxed">
-                            <div className="space-y-2.5">
-                              <div>
-                                <span className="text-[9px] font-extrabold text-slate-500 uppercase tracking-wider block">
-                                  Kegiatan / Pembelanjaan:
-                                </span>
-                                <div className="font-bold text-slate-900 text-xs mt-0.5 leading-snug">
-                                  {photo.title || `Dokumentasi Kegiatan ${globalPhotoNumber}`}
-                                </div>
-                              </div>
-
-                              <div className="pt-2 border-t border-slate-200/80 space-y-1 text-[10.5px]">
-                                {photo.date && (
-                                  <div className="flex items-start space-x-1">
-                                    <span className="text-slate-500 font-medium w-14 shrink-0">Tanggal:</span>
-                                    <span className="font-semibold text-slate-800">{photo.date}</span>
-                                  </div>
-                                )}
-                                {photo.location && (
-                                  <div className="flex items-start space-x-1">
-                                    <span className="text-slate-500 font-medium w-14 shrink-0">Lokasi:</span>
-                                    <span className="font-semibold text-slate-800">{photo.location}</span>
-                                  </div>
-                                )}
-                              </div>
-
-                              {showKeterangan && photo.description?.trim() && (
-                                <div className="pt-2 border-t border-slate-200/80">
-                                  <span className="text-[9px] font-extrabold text-slate-500 uppercase tracking-wider block mb-0.5">
-                                    Keterangan Detail:
-                                  </span>
-                                  <p className="text-[10.5px] text-slate-700 leading-relaxed text-justify line-clamp-4 print:line-clamp-none">
-                                    {photo.description}
-                                  </p>
-                                </div>
-                              )}
+                        <div className="w-full h-full bg-slate-50 border border-slate-300 rounded-lg flex items-center justify-center overflow-hidden">
+                          {photo.imageUrl ? (
+                            <img
+                              src={photo.imageUrl}
+                              alt="Dokumentasi"
+                              className={photo.fitMode === 'contain' ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover'}
+                            />
+                          ) : (
+                            <div className="text-center p-4 text-slate-400 text-xs">
+                              <Camera className="w-8 h-8 mx-auto mb-1 text-slate-300" />
+                              <span>Foto Belum Diunggah</span>
                             </div>
-                          </div>
+                          )}
                         </div>
                       </div>
                     );
                   })}
 
-                  {/* Empty slot jika ganjil (1 foto tersisa pada lembar ganjil) - Bersih tanpa watermark, tersembunyi saat cetak */}
+                  {/* Empty slot jika ganjil - Tersembunyi saat cetak */}
                   {Array.from({ length: 2 - sheetPhotos.length }).map((_, emptyIdx) => (
                     <div
                       key={`empty-2-${emptyIdx}`}
-                      className="print:hidden border border-dashed border-slate-200 rounded-lg p-6 text-center text-xs flex flex-col items-center justify-center min-h-[102mm] bg-slate-50/40 hover:bg-slate-50 transition-colors"
+                      className="print:hidden border border-dashed border-slate-200 rounded-lg p-6 text-center text-xs flex flex-col items-center justify-center min-h-[115mm] bg-slate-50/40 hover:bg-slate-50 transition-colors"
                     >
                       <button
                         type="button"
@@ -775,69 +723,37 @@ export const FotoDokumentasiLampiran: React.FC<FotoDokumentasiLampiranProps> = (
                   ))}
                 </div>
               ) : (
-                /* --- PILIHAN 2: FORMAT 4 FOTO PER LEMBAR (GRID 2x2 RINGKAS & HEMAT KERTAS) --- */
+                /* --- PILIHAN 2: FORMAT 4 FOTO PER LEMBAR (GRID 2x2 FRAME POLOS) --- */
                 <div className="grid grid-cols-2 gap-3.5 flex-1 content-start mt-1">
                   {sheetPhotos.map((photo, photoInSheetIdx) => {
-                    const globalPhotoNumber = sheetIdx * 4 + photoInSheetIdx + 1;
-
                     return (
                       <div
                         key={photo.id || photoInSheetIdx}
-                        className="border border-slate-200 rounded-xl p-3 bg-white print:border-slate-300 print-avoid-break h-[96mm] flex flex-col justify-between shadow-2xs print:shadow-none"
+                        className="border border-slate-300 rounded-xl p-2.5 bg-white print:border-slate-400 print-avoid-break h-[98mm] flex flex-col items-center justify-center overflow-hidden shadow-2xs print:shadow-none"
                       >
-                        {/* Top Bar for each photo */}
-                        <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-200 text-[10px]">
-                          <div className="flex items-center space-x-1.5 truncate">
-                            <span className="bg-slate-900 text-white font-bold text-[9px] px-2 py-0.5 rounded-md shrink-0 tracking-wide">
-                              FOTO {globalPhotoNumber}
-                            </span>
-                            <span className="font-bold text-slate-900 text-xs truncate max-w-[55mm]">
-                              {photo.title || `Dokumentasi ${globalPhotoNumber}`}
-                            </span>
-                          </div>
-                          {photo.date && (
-                            <span className="text-[9.5px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 font-medium truncate shrink-0 hidden sm:inline">
-                              📅 {photo.date}
-                            </span>
+                        <div className="w-full h-full bg-slate-50 border border-slate-300 rounded-lg flex items-center justify-center overflow-hidden">
+                          {photo.imageUrl ? (
+                            <img
+                              src={photo.imageUrl}
+                              alt="Dokumentasi"
+                              className={photo.fitMode === 'contain' ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover'}
+                            />
+                          ) : (
+                            <div className="text-center p-3 text-slate-400 text-[10px]">
+                              <Camera className="w-6 h-6 mx-auto mb-1 text-slate-300" />
+                              <span>Foto Belum Diunggah</span>
+                            </div>
                           )}
                         </div>
-
-                        {/* Photo Layout */}
-                        <div className="flex-1 flex flex-col h-full my-1">
-                          <div 
-                            className="w-full h-full bg-slate-50/80 border border-slate-300 rounded-lg flex items-center justify-center overflow-hidden shadow-2xs print:shadow-none"
-                          >
-                            {photo.imageUrl ? (
-                              <img
-                                src={photo.imageUrl}
-                                alt={photo.title}
-                                className={photo.fitMode === 'contain' ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover'}
-                              />
-                            ) : (
-                              <div className="text-center p-2 text-slate-400 text-[10px]">
-                                <Camera className="w-6 h-6 mx-auto mb-1 text-slate-300" />
-                                <span>Foto Belum Diunggah</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Keterangan singkat bawah (Opsional) */}
-                        {showKeterangan && photo.description?.trim() && (
-                          <div className="pt-1.5 mt-1 border-t border-slate-200 text-[9.5px] text-slate-700 truncate">
-                            <span className="font-bold text-slate-900">Ket: </span>
-                            {photo.description}
-                          </div>
-                        )}
                       </div>
                     );
                   })}
 
-                  {/* Fill empty slots in the grid (up to 4) - Bersih tanpa watermark, tersembunyi saat cetak */}
+                  {/* Fill empty slots in the grid (up to 4) - Tersembunyi saat cetak */}
                   {Array.from({ length: 4 - sheetPhotos.length }).map((_, emptyIdx) => (
                     <div
                       key={`empty-4-${emptyIdx}`}
-                      className="print:hidden border border-dashed border-slate-200 rounded-lg p-4 text-center text-xs flex flex-col items-center justify-center h-[95mm] bg-slate-50/40 hover:bg-slate-50 transition-colors"
+                      className="print:hidden border border-dashed border-slate-200 rounded-lg p-4 text-center text-xs flex flex-col items-center justify-center h-[98mm] bg-slate-50/40 hover:bg-slate-50 transition-colors"
                     >
                       <button
                         type="button"

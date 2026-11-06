@@ -1393,5 +1393,47 @@ export const pkkNotulenPresets: NotulenPreset[] = [
     decisions: '',
     arisanUang: 'Bu Indrianah dan Bu Tinah',
     arisanBarang: 'Bu Lukita Sari dan Hanavia'
+  },
+  {
+    id: 'pkk-notulen-september',
+    month: 'September',
+    date: '2026-09-06',
+    time: '16:00 - 17:15 WIB',
+    location: 'Ibu Tisrani',
+    participantCount: 35,
+    invitedCount: 42,
+    leader: 'TISRANI S.',
+    secretary: 'INDRIANAH',
+    agendaItems: [
+      'Rapat dibuka dengan bacaan basmallah, ucapan salam dan terima kasih atas kehadiran ibu-ibu',
+      'Menyanyikan lagu Mars PKK dan membaca 10 program pokok PKK',
+      'Laporan pertanggungjawaban keuangan PKK bulanan',
+      'Lain-lain: pengundian arisan',
+      'Evaluasi kegiatan agustusan dan persiapan kegiatan PKK Triwulan berikutnya',
+      'Penutup dengan bacaan hamdallah, ucapan salam dan terima kasih'
+    ],
+    discussionNotes: '',
+    decisions: ''
+  },
+  {
+    id: 'pkk-notulen-oktober',
+    month: 'Oktober',
+    date: '2026-10-04',
+    time: '16:00 - 17:15 WIB',
+    location: 'Ibu Tisrani',
+    participantCount: 38,
+    invitedCount: 42,
+    leader: 'TISRANI S.',
+    secretary: 'INDRIANAH',
+    agendaItems: [
+      'Rapat dibuka dengan bacaan basmallah, ucapan salam dan terima kasih atas kehadiran ibu-ibu',
+      'Menyanyikan lagu Mars PKK dan membaca 10 program pokok PKK',
+      'Laporan keuangan bulanan PKK dan arisan',
+      'Pembahasan persiapan Pengajian Akbar dalam rangka Hari Santri Nasional tanggal 25 Oktober 2026 di Masjid Al-Ijabah Gunungpati: disepakati bahwa per RT mendapatkan jatah snack 20 dos, dan warga diminta untuk ikut berpartisipasi aktif dalam kegiatan tersebut',
+      'Penyampaian perencanaan alokasi anggaran BOP khusus PKK sebesar Rp 3.000.000 dari Pemerintah Kota Semarang untuk mendukung kegiatan pemberdayaan warga',
+      'Penutup dengan bacaan hamdallah, ucapan salam dan terima kasih'
+    ],
+    discussionNotes: 'Rapat PKK bulan Oktober 2026 membahas persiapan Pengajian Akbar Hari Santri Nasional di Masjid Al-Ijabah serta informasi perencanaan anggaran BOP PKK sebesar Rp 3 juta.',
+    decisions: 'Seluruh warga dan ibu-ibu PKK berpartisipasi dalam Pengajian Akbar Hari Santri Nasional tanggal 25 Oktober 2026.'
   }
 ];
