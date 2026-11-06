@@ -14,8 +14,20 @@ import {
   Award,
   Layers,
   Scissors,
-  RotateCcw
+  RotateCcw,
+  Plus
 } from 'lucide-react';
+import { 
+  DndContext, 
+  closestCenter 
+} from '@dnd-kit/core';
+import { 
+  arrayMove, 
+  SortableContext, 
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { executePrint, downloadElementAsPdf, openInNewTab } from '../utils/printHelper';
 import { Bot, Loader2, Download, ExternalLink } from 'lucide-react';
 
@@ -418,6 +430,36 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
   const handleRemoveAgenda = (index: number) => {
     setAgendaItems(agendaItems.filter((_, idx) => idx !== index));
+  };
+
+  // Drag and Drop component for agenda items
+  const SortableAgendaItem = ({ id, index, text, onRemove }: { key?: React.Key, id: string, index: number, text: string, onRemove: () => void }) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+    const style = { transform: CSS.Transform.toString(transform), transition };
+    return (
+      <div 
+        ref={setNodeRef} 
+        style={style} 
+        className="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm cursor-grab" 
+        {...attributes} 
+        {...listeners}
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-slate-400 cursor-grab">⋮⋮</span>
+          <span className="font-medium text-slate-700">{index + 1}. {text}</span>
+        </div>
+        <button 
+          type="button" 
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }} 
+          className="text-red-600 hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded-lg"
+        >
+          ×
+        </button>
+      </div>
+    );
   };
 
   const handlePrint = () => {
@@ -869,6 +911,13 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
               </button>
             );
           })}
+          <button
+            onClick={handleAddPreset}
+            className="p-2.5 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 hover:bg-slate-50 text-slate-500 flex flex-col items-center justify-center transition-all"
+          >
+            <Plus className="w-5 h-5 mb-1" />
+            <span className="text-[10px] font-bold uppercase">Tambah</span>
+          </button>
           </div>
         </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 print:block">
@@ -1469,21 +1518,33 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     Tambah
                   </button>
                 </div>
-                <ul className="space-y-1">
-
-                  {agendaItems.map((ag, i) => (
-                    <li key={i} className="flex justify-between items-center bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200">
-                      <span>{i + 1}. {ag}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveAgenda(i)}
-                        className="text-red-600 hover:text-red-700 font-bold px-1"
-                      >
-                        ×
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                <DndContext 
+                  collisionDetection={closestCenter}
+                  onDragEnd={(event) => {
+                    const {active, over} = event;
+                    if (over && active.id !== over.id) {
+                      setAgendaItems((items) => {
+                        const oldIndex = items.indexOf(active.id as string);
+                        const newIndex = items.indexOf(over.id as string);
+                        return arrayMove(items, oldIndex, newIndex);
+                      });
+                    }
+                  }}
+                >
+                  <SortableContext items={agendaItems} strategy={verticalListSortingStrategy}>
+                    <div className="space-y-1">
+                      {agendaItems.map((ag, i) => (
+                        <SortableAgendaItem 
+                          key={ag} 
+                          id={ag} 
+                          index={i} 
+                          text={ag} 
+                          onRemove={() => handleRemoveAgenda(i)} 
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
               </div>
 
               <div className="pt-2">
