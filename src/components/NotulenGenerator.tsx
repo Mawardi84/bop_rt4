@@ -440,21 +440,21 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
       <div 
         ref={setNodeRef} 
         style={style} 
-        className="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm cursor-grab" 
-        {...attributes} 
-        {...listeners}
+        className="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm"
       >
         <div className="flex items-center gap-3">
-          <span className="text-slate-400 cursor-grab">⋮⋮</span>
+          <span className="text-slate-400 cursor-grab px-1 select-none" {...attributes} {...listeners} title="Tarik untuk mengubah urutan">⋮⋮</span>
           <span className="font-medium text-slate-700">{index + 1}. {text}</span>
         </div>
         <button 
           type="button" 
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             onRemove();
           }} 
-          className="text-red-600 hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded-lg"
+          className="text-red-600 hover:text-red-700 font-bold px-2.5 py-1 bg-red-50 hover:bg-red-100 rounded-lg text-sm cursor-pointer"
+          title="Hapus agenda"
         >
           ×
         </button>
@@ -1524,8 +1524,8 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     const {active, over} = event;
                     if (over && active.id !== over.id) {
                       setAgendaItems((items) => {
-                        const oldIndex = items.indexOf(active.id as string);
-                        const newIndex = items.indexOf(over.id as string);
+                        const oldIndex = items.findIndex((_, i) => `${items[i]}-${i}` === active.id);
+                        const newIndex = items.findIndex((_, i) => `${items[i]}-${i}` === over.id);
                         return arrayMove(items, oldIndex, newIndex);
                       });
                     }
@@ -1535,8 +1535,8 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     <div className="space-y-1">
                       {agendaItems.map((ag, i) => (
                         <SortableAgendaItem 
-                          key={ag} 
-                          id={ag} 
+                          key={`${ag}-${i}`} 
+                          id={`${ag}-${i}`} 
                           index={i} 
                           text={ag} 
                           onRemove={() => handleRemoveAgenda(i)} 
@@ -2438,8 +2438,8 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                         ? 'I. Susunan Acara Pelaksanaan Kegiatan'
                         : 'I. Susunan Agenda / Acara Rapat'}
                   </div>
-                  <div className={`grid ${meetingType === 'pkk' && agendaItems.length <= 4 ? 'grid-cols-1' : 'grid-cols-2'} gap-x-4 ${
-                    isCompact ? 'gap-y-0.5 text-[10px] print:text-[9px] pl-2 leading-tight' : 'gap-y-1.5 text-[13px] print:text-[13px] pl-3 leading-relaxed'
+                  <div className={`flex flex-col ${
+                    isCompact ? 'space-y-0.5 text-[10px] print:text-[9px] pl-2 leading-tight' : 'space-y-1.5 text-[13px] print:text-[13px] pl-3 leading-relaxed'
                   } text-slate-800`}>
                     {agendaItems.map((ag, i) => (
                       <div key={i} className="flex space-x-1.5">
