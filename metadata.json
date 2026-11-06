@@ -1,0 +1,6 @@
+{
+  "name": "BOP RT Manager Kota Semarang",
+  "description": "Sistem pelaporan dan pencatatan dana Bantuan Operasional Penyelenggaraan Rukun Tetangga (BOP RT) Kota Semarang otomatis tanpa ketik ulang.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

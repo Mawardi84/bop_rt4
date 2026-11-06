@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "AppData": {
+      "title": "AppData",
+      "description": "Master state document containing RT profile, transactions, SPJ reports, and meeting records.",
+      "type": "object",
+      "properties": {
+        "profile": { "type": "object", "description": "Profile data for RT 04" },
+        "transactions": { "type": "array", "description": "BOP RT Financial transactions" },
+        "monthlySpjList": { "type": "array", "description": "Monthly SPJ documentation records" },
+        "meetingRecords": { "type": "array", "description": "Meeting minutes and documentation" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last update" },
+        "updatedBy": { "type": "string", "description": "User or operator identifier" }
+      },
+      "required": ["profile", "transactions", "monthlySpjList", "meetingRecords"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial cash transaction item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string", "enum": ["income", "expense"] },
+        "category": { "type": "string" }
+      },
+      "required": ["id", "date", "description", "amount", "type", "category"]
+    }
+  },
+  "firestore": {
+    "/bop_data/{docId}": {
+      "schema": "AppData",
+      "description": "Collection storing centralized BOP RT records for RT 04 Ngabean"
+    }
+  }
+}

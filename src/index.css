@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-arial-narrow: "Arial Narrow", "Nimbus Sans Narrow", "Roboto Condensed", "Liberation Sans Narrow", Arial, sans-serif;
+  }
+
+body {
+  font-family: var(--font-arial-narrow);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1e293b;
+}
+}
+
+/* Arial Narrow Utility Class */
+.font-arial-narrow {
+  font-family: "Arial Narrow", "Nimbus Sans Narrow", "Roboto Condensed", "Liberation Sans Narrow", Arial, sans-serif !important;
+}
+
+:root {
+  --font-base: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Official Document Sheets (Surat, BKU, SPJ, BA Kesepakatan, Notulen) */
+.document-sheet,
+.print-document,
+.official-doc {
+  font-family: "Arial Narrow", "Nimbus Sans Narrow", "Roboto Condensed", "Liberation Sans Narrow", Arial, sans-serif !important;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+/* Ensure KOP logos have clean transparent background without box shadows */
+.official-doc img,
+.document-sheet img,
+.print-document img,
+img[alt*="Logo"] {
+  box-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  background-color: transparent !important;
+}
+
+/* Print Optimization for Arial Narrow & Exact Official Document Matching */
+@media print {
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: 215.9mm 330.2mm;
+    margin: 10mm 20mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Completely eliminate headers, sidebars, toolbars, buttons and modals */
+  header,
+  aside,
+  nav,
+  .print\:hidden {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Reset document sheets to pure white A4 paper format without screen decorations */
+  .document-sheet,
+  .print-document,
+  .official-doc {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Remove outer app container offsets */
+  .min-h-screen {
+    min-height: auto !important;
+    background: #ffffff !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .print-avoid-break,
+  .print-one-page {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .print-page-break {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .print-page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  *,
+  html,
+  body,
+  table,
+  th,
+  td,
+  p,
+  span,
+  div,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  input,
+  textarea {
+    font-family: "Arial Narrow", "Nimbus Sans Narrow", "Roboto Condensed", "Liberation Sans Narrow", Arial, sans-serif !important;
+  }
+}
+
+
