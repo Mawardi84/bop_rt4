@@ -735,6 +735,27 @@ Seluruh operasional kontingen RT 04 didukung anggaran BOP RT 04 TA 2026. Ibu Wal
     decisions: `1. Kejuaraan dari Wali Kota Semarang: JUARA 1 diraih RW 04 (Kp. Ngabean) dan meraih Trofi Utama; Juara 2 RW 03; Juara 3 RW 09. Seluruh kontingen menerima hadiah uang pembinaan dari Ibu Wali Kota Semarang.
 2. Kejuaraan Kelurahan Gunungpati: Juara 1 RW 09; JUARA 2 diraih RW 04 (Kp. Ngabean); Juara 3 RW 10; Harapan RW 03.
 3. Belanja operasional kontingen RT 04 (konsumsi, sound kirab, dan atribut) dipertanggungjawabkan dalam SPJ BOP RT Bulan Agustus 2026. Acara berlangsung tertib, aman, dan meriah.`
+  },
+  {
+    id: 'notulen-oktober',
+    month: 'Oktober',
+    date: '2026-10-08',
+    time: '19:30 - selesai',
+    location: 'Kediaman Bp. Ngadi',
+    participantCount: 40,
+    leader: 'M. WAKHID NURJANAH',
+    secretary: 'MUH ZAENUN',
+    agendaTitle: 'Pembuatan Lubang Biopori di Lingkungan RT 04',
+    agendaItems: [
+      'Pembukaan oleh Pimpinan Rapat (Ketua RT 04 Bpk. M. WAKHID NURJANAH)',
+      'Sosialisasi Pentingnya Pembuatan Lubang Biopori untuk Resapan Air & Penanganan Genangan',
+      'Koordinasi Pengadaan Alat Pengeboran Tanah, Pipa PVC, dan Tutup Biopori',
+      'Penentuan Titik Lokasi Pemasangan Biopori di RT 04 RW 04 Ngabean',
+      'Alokasi Pembiayaan dari Anggaran BOP RT Tahun Anggaran 2026',
+      'Penutup dan Doa'
+    ],
+    discussionNotes: 'Rapat rutin warga RT 04 dilaksanakan pada hari Kamis, 8 Oktober 2026 pukul 19.30 WIB bertempat di kediaman Bp. Ngadi. Pembahasan utama mengenai program pembuatan lubang biopori di titik-titik rawan genangan dan pekarangan warga guna meningkatkan daya serap air tanah serta pengelolaan sampah organik secara mandiri.\n\nBiaya pengadaan alat bor dan perlengkapan biopori didukung sepenuhnya dari alokasi Dana Bantuan Operasional RT (BOP) Tahun Anggaran 2026.',
+    decisions: '1. Disepakati pelaksanaan kerja bakti pembuatan lubang biopori di wilayah RT 04 RW 04 Ngabean.\n2. Pembiayaan peralatan dan material dibebankan pada anggaran BOP RT 04 Tahun Anggaran 2026.\n3. Warga diimbau berpartisipasi aktif dalam perawatan lubang biopori di sekitar rumah masing-masing.'
   }
 ];
 
