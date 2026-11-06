@@ -476,8 +476,8 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
   const romanMonth = getRomanMonth(month);
   const numMonth = getMonthIndexNumber(month);
   const defaultNomorSurat = meetingType === 'rt'
-    ? `${numMonth}/UND-RT.04/${romanMonth}/${profile.year}`
-    : `${numMonth}/PKK-RT.04/${romanMonth}/${profile.year}`;
+    ? `${numMonth}/UND-RT.04/GNP/${romanMonth}/${profile.year}`
+    : `${numMonth}/UND-PKK.04/GNP/${romanMonth}/${profile.year}`;
   const currentNomorSurat = undanganNomorCustom || defaultNomorSurat;
 
   const defaultHalSurat = meetingType === 'rt'
