@@ -32,13 +32,14 @@ export async function downloadElementAsPdf(
     // Check if target is landscape
     const isLandscape = el.classList.contains('landscape-doc') || !!el.querySelector('.landscape-doc');
 
-    // Render canvas from target DOM element using html2canvas-pro with exact A4 pixel widths
+    // Render canvas from target DOM element using html2canvas-pro with exact F4 Folio pixel dimensions
+    // At 96 DPI: 215mm is ~813px, 330mm is ~1248px
     const canvas = await html2canvas(el, {
       scale: 2, // High DPI for clear text
       useCORS: true,
       logging: false,
       backgroundColor: '#ffffff',
-      windowWidth: isLandscape ? 1120 : 794,
+      windowWidth: isLandscape ? 1248 : 815,
       onclone: (clonedDoc) => {
         // Inject clean print styles into cloned document
         const style = clonedDoc.createElement('style');
@@ -48,12 +49,12 @@ export async function downloadElementAsPdf(
             display: none !important;
           }
           
-          /* Clean white background, no outer borders or giant screen paddings */
+          /* Clean white background, exact F4 margins without screen borders */
           .official-doc, .document-sheet, .print-document {
             background-color: #ffffff !important;
             box-shadow: none !important;
             border: none !important;
-            padding: 16px 24px !important;
+            padding: 18px 26px !important;
             margin: 0 auto !important;
             width: 100% !important;
             max-width: 100% !important;
@@ -91,21 +92,22 @@ export async function downloadElementAsPdf(
     });
 
     const imgData = canvas.toDataURL('image/jpeg', 0.98);
+    const pdfWidth = isLandscape ? 330 : 215; // Standar F4 / Folio (215 mm x 330 mm)
+    const pdfHeight = isLandscape ? 215 : 330;
+
     const pdf = new jsPDF({
       orientation: isLandscape ? 'landscape' : 'portrait',
       unit: 'mm',
-      format: 'a4',
+      format: [pdfWidth, pdfHeight],
     });
 
-    const pdfWidth = isLandscape ? 297 : 210; // A4 dimensions
-    const pdfHeight = isLandscape ? 210 : 297;
     let imgWidth = pdfWidth;
     let imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    // Smart 1-page fit: If content height slightly exceeds 1 page (within 18%),
+    // Smart 1-page fit: If content height slightly exceeds 1 page (within 15%),
     // scale it cleanly so single-page documents don't spill a few lines onto page 2
-    if (imgHeight > (pdfHeight - 10) && imgHeight <= pdfHeight * 1.18) {
-      const scale = (pdfHeight - 12) / imgHeight;
+    if (imgHeight > (pdfHeight - 12) && imgHeight <= pdfHeight * 1.15) {
+      const scale = (pdfHeight - 14) / imgHeight;
       imgWidth = imgWidth * scale;
       imgHeight = imgHeight * scale;
       const xOffset = (pdfWidth - imgWidth) / 2;
@@ -118,10 +120,10 @@ export async function downloadElementAsPdf(
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
 
-      // Multi-page document handling (buffer of 10mm to prevent stray blank pages)
-      while (heightLeft > 10) {
+      // Multi-page document handling (buffer of 12mm to prevent stray blank pages)
+      while (heightLeft > 12) {
         position = heightLeft - imgHeight;
-        pdf.addPage();
+        pdf.addPage([pdfWidth, pdfHeight], isLandscape ? 'landscape' : 'portrait');
         pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
         heightLeft -= pdfHeight;
       }
@@ -153,8 +155,8 @@ export function executePrint(title?: string): void {
   dynamicStyle.id = 'dynamic-print-page-style';
   dynamicStyle.innerHTML = `
     @page {
-      size: A4 ${isLandscape ? 'landscape' : 'portrait'} !important;
-      margin: 8mm 12mm !important;
+      size: ${isLandscape ? '330mm 215mm' : '215mm 330mm'} !important; /* Standar Kertas F4 / Folio Indonesia */
+      margin: ${isLandscape ? '8mm 12mm' : '10mm 15mm'} !important;
     }
   `;
   document.head.appendChild(dynamicStyle);
@@ -208,7 +210,7 @@ export function openCleanPrintWindow(elementOrSelector?: HTMLElement | string, t
             <meta charset="utf-8">
             ${styleSheets}
             <style>
-              @page { size: A4 ${isLandscape ? 'landscape' : 'portrait'}; margin: 10mm; }
+              @page { size: ${isLandscape ? '330mm 215mm' : '215mm 330mm'}; margin: 10mm 15mm; }
               body { font-family: 'Arial Narrow', Arial, sans-serif; background: #ffffff !important; color: #000000 !important; margin: 0; padding: 20px; }
               .official-doc { border: none !important; shadow: none !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
               .print\\:hidden, button, .no-print { display: none !important; }

@@ -879,6 +879,12 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
                 <span>Laporan Pelaksanaan (Sekretaris)</span>
               </button>
             </div>
+
+            {/* Paper Format Indicator */}
+            <div className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 bg-amber-50 text-amber-800 rounded-xl text-xs font-bold border border-amber-200" title="Format Dokumen Standar F4 / Folio (215 x 330 mm)">
+              <FileText className="w-3.5 h-3.5 text-amber-600" />
+              <span>Kertas: F4 / Folio (215 × 330 mm)</span>
+            </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-2">
@@ -905,7 +911,7 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
                       reportOrientation === 'portrait' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
                     }`}
                   >
-                    Portrait
+                    Portrait F4
                   </button>
                   <button
                     onClick={() => setReportOrientation('landscape')}
@@ -913,7 +919,7 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
                       reportOrientation === 'landscape' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
                     }`}
                   >
-                    Landscape
+                    Landscape F4
                   </button>
                 </div>
               </>
@@ -931,17 +937,19 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
               onClick={handleDownloadPdf}
               disabled={isDownloadingPdf}
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-xs flex items-center space-x-1.5 text-xs transition-all cursor-pointer disabled:opacity-50"
+              title="Unduh Dokumen PDF Ukuran F4 / Folio (215 x 330 mm)"
             >
               {isDownloadingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
-              <span>{isDownloadingPdf ? 'Memproses...' : 'Unduh PDF'}</span>
+              <span>{isDownloadingPdf ? 'Memproses...' : 'Unduh PDF (F4)'}</span>
             </button>
 
             <button
               onClick={handlePrint}
               className="bg-red-600 hover:bg-red-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-xs flex items-center space-x-1.5 text-xs transition-all cursor-pointer"
+              title="Cetak Langsung Format F4 / Folio"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>Cetak</span>
+              <span>Cetak F4</span>
             </button>
 
             <button

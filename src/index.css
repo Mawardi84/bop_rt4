@@ -61,8 +61,8 @@ img[alt*="Logo"] {
   }
 
   @page {
-    size: A4 portrait;
-    margin: 8mm 12mm;
+    size: 215mm 330mm; /* Standar Kertas F4 / Folio Indonesia (21,5 cm x 33,0 cm) */
+    margin: 10mm 15mm;
   }
 
   html,
@@ -86,7 +86,7 @@ img[alt*="Logo"] {
     overflow: hidden !important;
   }
 
-  /* Reset document sheets to pure white A4 paper format without screen decorations */
+  /* Reset document sheets to pure white F4 Folio paper format without screen decorations */
   .document-sheet,
   .print-document,
   .official-doc {
@@ -101,12 +101,12 @@ img[alt*="Logo"] {
   }
 
   .landscape-doc {
-    width: 297mm !important;
-    max-width: 297mm !important;
+    width: 330mm !important;
+    max-width: 330mm !important;
     height: auto !important;
     min-height: auto !important;
     margin: 0 auto !important;
-    padding: 6mm 12mm !important;
+    padding: 8mm 12mm !important;
   }
 
   /* Remove outer app container offsets */
