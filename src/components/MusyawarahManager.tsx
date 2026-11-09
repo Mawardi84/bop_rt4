@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { MusyawarahRecord, RtProfile } from '../types';
 import { formatDate } from '../utils/formatters';
-import { Users, Plus, FileText, CheckCircle2, Calendar, UserCheck } from 'lucide-react';
+import { Users, Plus, FileText, CheckCircle2, Calendar, UserCheck, Trash2 } from 'lucide-react';
 import { executePrint } from '../utils/printHelper';
 
 interface MusyawarahManagerProps {
   records: MusyawarahRecord[];
   onAddRecord: (record: MusyawarahRecord) => void;
+  onDeleteRecord?: (id: string) => void;
   profile: RtProfile;
 }
 
 export const MusyawarahManager: React.FC<MusyawarahManagerProps> = ({
   records,
   onAddRecord,
+  onDeleteRecord,
   profile,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +60,10 @@ export const MusyawarahManager: React.FC<MusyawarahManagerProps> = ({
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Berita Acara Musyawarah Warga</h2>
+          <h2 className="text-xl font-bold text-slate-900 flex items-center space-x-2">
+            <Users className="w-5 h-5 text-red-600" />
+            <span>Berita Acara Musyawarah Warga</span>
+          </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             Setiap penggunaan dana BOP RT wajib diputuskan melalui musyawarah warga sesuai aturan Pemkot Semarang.
           </p>
@@ -77,7 +82,7 @@ export const MusyawarahManager: React.FC<MusyawarahManagerProps> = ({
         {records.map((rec) => (
           <div
             key={rec.id}
-            className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-red-200 transition-all"
+            className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-red-200 transition-all group"
           >
             <div>
               <div className="flex justify-between items-start mb-3">
@@ -85,19 +90,30 @@ export const MusyawarahManager: React.FC<MusyawarahManagerProps> = ({
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Sah (Musyawarah Warga)</span>
                 </span>
-                <span className="text-xs text-slate-400 font-medium flex items-center space-x-1">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>{formatDate(rec.date)}</span>
-                </span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-slate-400 font-medium flex items-center space-x-1">
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span>{formatDate(rec.date)}</span>
+                  </span>
+                  {onDeleteRecord && (
+                    <button
+                      onClick={() => onDeleteRecord(rec.id)}
+                      className="text-slate-300 hover:text-red-600 transition-colors"
+                      title="Hapus Berita Acara"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
 
               <h3 className="font-bold text-slate-900 text-base mb-2">{rec.title}</h3>
-              <p className="text-xs text-slate-600 mb-3">
+              <p className="text-xs text-slate-600 mb-3 line-clamp-2">
                 <strong>Agenda:</strong> {rec.agenda}
               </p>
-              <p className="text-xs text-slate-600 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+              <div className="text-xs text-slate-600 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100 line-clamp-3">
                 <strong>Hasil Keputusan:</strong> {rec.decisions}
-              </p>
+              </div>
 
               <div className="flex items-center space-x-4 text-xs text-slate-500 border-t border-slate-100 pt-3">
                 <div className="flex items-center space-x-1">
@@ -122,6 +138,13 @@ export const MusyawarahManager: React.FC<MusyawarahManagerProps> = ({
             </div>
           </div>
         ))}
+        {records.length === 0 && (
+          <div className="col-span-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center">
+            <Users className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+            <h3 className="text-slate-900 font-bold">Belum Ada Catatan Musyawarah</h3>
+            <p className="text-slate-500 text-xs mt-1">Buat berita acara musyawarah untuk melegalkan penggunaan dana BOP RT.</p>
+          </div>
+        )}
       </div>
 
       {/* Modal Add Musyawarah */}

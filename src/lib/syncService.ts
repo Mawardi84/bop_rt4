@@ -1,6 +1,6 @@
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from './firebase';
-import { RtProfile, Transaction, RapItem, MonthlySpjRecord, MusyawarahRecord, CategoryDefinition } from '../types';
+import { RtProfile, Transaction, RapItem, MonthlySpjRecord, MusyawarahRecord, CategoryDefinition, SpkRecord, HonorReceipt } from '../types';
 
 export interface BopMasterData {
   profile: RtProfile;
@@ -9,6 +9,8 @@ export interface BopMasterData {
   rapItems: RapItem[];
   spjRecords: MonthlySpjRecord[];
   musyawarahRecords: MusyawarahRecord[];
+  spkRecords: SpkRecord[];
+  honorReceipts: HonorReceipt[];
   updatedAt?: string;
   updatedBy?: string;
 }

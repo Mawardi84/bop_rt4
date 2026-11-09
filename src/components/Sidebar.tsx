@@ -16,7 +16,8 @@ import {
   X,
   ChevronRight,
   ExternalLink,
-  Printer
+  Printer,
+  Briefcase
 } from 'lucide-react';
 import { isInIframe, openInNewTab } from '../utils/printHelper';
 
@@ -60,6 +61,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'sptjm', label: 'Surat Pernyataan (SPTJM)', icon: ShieldAlert },
         { id: 'surat', label: 'Surat Permohonan Pencairan', icon: FileCheck },
         { id: 'pengambilan', label: 'Pengambilan Bulanan', icon: FileCheck },
+        { id: 'spk', label: 'Surat Perintah Kerja (SPK)', icon: Briefcase },
+        { id: 'honor-receipt', label: 'Tanda Terima Honor', icon: Receipt },
       ],
     },
     {

@@ -62,22 +62,45 @@ export async function downloadElementAsPdf(
           .text-slate-700 { color: #334155 !important; }
           .text-slate-600 { color: #475569 !important; }
           .text-slate-500 { color: #64748b !important; }
+          
+          .text-indigo-600 { color: #4f46e5 !important; }
+          .text-indigo-700 { color: #4338ca !important; }
+          .bg-indigo-50 { background-color: #eef2ff !important; }
+          .bg-indigo-600 { background-color: #4f46e5 !important; }
+          
+          .text-emerald-600 { color: #059669 !important; }
+          .text-emerald-700 { color: #047857 !important; }
+          .bg-emerald-50 { background-color: #ecfdf5 !important; }
+          .bg-emerald-600 { background-color: #059669 !important; }
+          
           .bg-slate-100 { background-color: #f1f5f9 !important; }
           .bg-slate-50 { background-color: #f8fafc !important; }
+          .border-slate-200 { border-color: #e2e8f0 !important; }
+          .border-black { border-color: #000000 !important; }
+          
+          /* Catch-all for any oklch variables that might remain */
+          :root {
+            --color-indigo-600: #4f46e5 !important;
+            --color-indigo-50: #eef2ff !important;
+            --color-slate-900: #0f172a !important;
+            --color-emerald-600: #059669 !important;
+          }
         `;
         clonedDoc.head.appendChild(style);
       }
     });
 
+    const isLandscape = el.classList.contains('landscape-doc');
+
     const imgData = canvas.toDataURL('image/jpeg', 0.98);
     const pdf = new jsPDF({
-      orientation: 'portrait',
+      orientation: isLandscape ? 'landscape' : 'portrait',
       unit: 'mm',
       format: 'a4',
     });
 
-    const pdfWidth = 210; // A4 width in mm
-    const pdfHeight = 297; // A4 height in mm
+    const pdfWidth = isLandscape ? 297 : 210; // A4 dimensions
+    const pdfHeight = isLandscape ? 210 : 297;
     const imgWidth = pdfWidth;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -149,6 +172,7 @@ export function openCleanPrintWindow(elementOrSelector?: HTMLElement | string, t
         .map((element) => element.outerHTML)
         .join('\n');
 
+      const isLandscape = el.classList.contains('landscape-doc');
       const docHtml = `
         <!DOCTYPE html>
         <html>
@@ -157,14 +181,14 @@ export function openCleanPrintWindow(elementOrSelector?: HTMLElement | string, t
             <meta charset="utf-8">
             ${styleSheets}
             <style>
-              @page { size: A4 portrait; margin: 10mm; }
+              @page { size: A4 ${isLandscape ? 'landscape' : 'portrait'}; margin: 10mm; }
               body { font-family: 'Arial Narrow', Arial, sans-serif; background: #ffffff !important; color: #000000 !important; margin: 0; padding: 20px; }
               .official-doc { border: none !important; shadow: none !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
               .print\\:hidden, button, .no-print { display: none !important; }
             </style>
           </head>
           <body onload="setTimeout(function(){ window.focus(); window.print(); }, 500);">
-            <div class="official-doc">
+            <div class="official-doc ${isLandscape ? 'landscape-doc' : ''}">
               ${el.innerHTML}
             </div>
           </body>

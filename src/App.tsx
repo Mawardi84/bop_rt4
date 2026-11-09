@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ActiveTab, Transaction, RtProfile, MusyawarahRecord, RapItem, MonthlySpjRecord, CategoryDefinition } from './types';
-import { initialTransactions, initialRtProfile, initialMusyawarah, initialRapItems, initialMonthlySpj, defaultCategories } from './data/initialData';
+import { ActiveTab, Transaction, RtProfile, MusyawarahRecord, RapItem, MonthlySpjRecord, CategoryDefinition, SpkRecord, HonorReceipt } from './types';
+import { initialTransactions, initialRtProfile, initialMusyawarah, initialRapItems, initialMonthlySpj, defaultCategories, initialSpkRecords, initialHonorReceipts } from './data/initialData';
 import { absorbRapToTransactions } from './utils/rapSync';
 import { subscribeBopData, saveBopDataToCloud } from './lib/syncService';
 import { testConnection } from './lib/firebase';
@@ -18,6 +18,8 @@ import { MusyawarahManager } from './components/MusyawarahManager';
 import { SettingsModal } from './components/SettingsModal';
 import { BaKesepakatanManager } from './components/BaKesepakatanManager';
 import { SptjmGenerator } from './components/SptjmGenerator';
+import { SpkGenerator } from './components/SpkGenerator';
+import { HonorReceiptGenerator } from './components/HonorReceiptGenerator';
 import { LoginHeroLanding } from './components/LoginHeroLanding';
 
 export default function App() {
@@ -116,6 +118,30 @@ export default function App() {
     }
     return initialMonthlySpj;
   });
+ 
+  const [spkRecords, setSpkRecords] = useState<SpkRecord[]>(() => {
+    const saved = localStorage.getItem('bop_rt_spk');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return initialSpkRecords;
+      }
+    }
+    return initialSpkRecords;
+  });
+
+  const [honorReceipts, setHonorReceipts] = useState<HonorReceipt[]>(() => {
+    const saved = localStorage.getItem('bop_rt_honor_receipts');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return initialHonorReceipts;
+      }
+    }
+    return initialHonorReceipts;
+  });
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -149,6 +175,8 @@ export default function App() {
       if (cloudData.rapItems) setRapItems(cloudData.rapItems);
       if (cloudData.spjRecords) setSpjRecords(cloudData.spjRecords);
       if (cloudData.musyawarahRecords) setMusyawarahRecords(cloudData.musyawarahRecords);
+      if (cloudData.spkRecords) setSpkRecords(cloudData.spkRecords);
+      if (cloudData.honorReceipts) setHonorReceipts(cloudData.honorReceipts);
       setSyncStatus('synced');
     }, () => {
       setSyncStatus('offline');
@@ -181,6 +209,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('bop_rt_categories', JSON.stringify(categories));
   }, [categories]);
+ 
+  useEffect(() => {
+    localStorage.setItem('bop_rt_spk', JSON.stringify(spkRecords));
+  }, [spkRecords]);
+
+  useEffect(() => {
+    localStorage.setItem('bop_rt_honor_receipts', JSON.stringify(honorReceipts));
+  }, [honorReceipts]);
 
   // Push updates to Firestore Cloud when admin performs any write/edit
   const persistToCloud = (updates: {
@@ -190,6 +226,8 @@ export default function App() {
     rapItems?: RapItem[];
     spjRecords?: MonthlySpjRecord[];
     musyawarahRecords?: MusyawarahRecord[];
+    spkRecords?: SpkRecord[];
+    honorReceipts?: HonorReceipt[];
   }) => {
     setSyncStatus('syncing');
     saveBopDataToCloud(updates)
@@ -264,6 +302,17 @@ export default function App() {
     alert('⚡ Rincian Rencana Anggaran Penggunaan (RAP) periode Januari s/d Agustus (8 bulan) telah diserap otomatis ke dalam Pencatatan Transaksi Kas Keluar!\n\n(Catatan: Alokasi September - Desember belum diserap karena belum terealisasi).');
   };
 
+  const handleDeleteMusyawarah = (id: string) => {
+    if (!guardAdminAction()) return;
+    if (window.confirm('Apakah Anda yakin ingin menghapus catatan musyawarah ini?')) {
+      setMusyawarahRecords((prev) => {
+        const updated = prev.filter((r) => r.id !== id);
+        persistToCloud({ musyawarahRecords: updated });
+        return updated;
+      });
+    }
+  };
+
   const handleUpdateProfile = (newProfile: RtProfile) => {
     if (!guardAdminAction()) return;
     setProfile(newProfile);
@@ -274,6 +323,55 @@ export default function App() {
     if (!guardAdminAction()) return;
     setSpjRecords(newSpj);
     persistToCloud({ spjRecords: newSpj });
+  };
+ 
+  const handleAddSpk = (rec: SpkRecord) => {
+    if (!guardAdminAction()) return;
+    setSpkRecords((prev) => {
+      const updated = [rec, ...prev];
+      persistToCloud({ spkRecords: updated });
+      return updated;
+    });
+  };
+ 
+  const handleUpdateSpk = (rec: SpkRecord) => {
+    if (!guardAdminAction()) return;
+    setSpkRecords((prev) => {
+      const updated = prev.map((r) => (r.id === rec.id ? rec : r));
+      persistToCloud({ spkRecords: updated });
+      return updated;
+    });
+  };
+
+  const handleDeleteSpk = (id: string) => {
+    if (!guardAdminAction()) return;
+    if (window.confirm('Apakah Anda yakin ingin menghapus SPK ini?')) {
+      setSpkRecords((prev) => {
+        const updated = prev.filter((r) => r.id !== id);
+        persistToCloud({ spkRecords: updated });
+        return updated;
+      });
+    }
+  };
+
+  const handleAddHonorReceipt = (rec: HonorReceipt) => {
+    if (!guardAdminAction()) return;
+    setHonorReceipts((prev) => {
+      const updated = [rec, ...prev];
+      persistToCloud({ honorReceipts: updated });
+      return updated;
+    });
+  };
+
+  const handleDeleteHonorReceipt = (id: string) => {
+    if (!guardAdminAction()) return;
+    if (window.confirm('Apakah Anda yakin ingin menghapus tanda terima ini?')) {
+      setHonorReceipts((prev) => {
+        const updated = prev.filter((r) => r.id !== id);
+        persistToCloud({ honorReceipts: updated });
+        return updated;
+      });
+    }
   };
 
   const totalIncome = transactions
@@ -305,6 +403,42 @@ export default function App() {
       />
     );
   }
+
+  const handleGenerateHonorFromSpk = (spk: SpkRecord) => {
+    if (!guardAdminAction()) return;
+    
+    // Check if honor list for this SPK already looks generated (optional check)
+    const items = spk.workers.map((workerName) => ({
+      id: `hri-spk-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      name: workerName,
+      position: 'Pekerja / Tukang',
+      qty: 1,
+      unit: 'KEG',
+      pricePerUnit: spk.costPerWorker || 150000,
+      total: spk.costPerWorker || 150000,
+    }));
+
+    const newHonorReceipt: HonorReceipt = {
+      id: `hr-from-spk-${spk.id}-${Date.now()}`,
+      activityName: spk.workDescription,
+      date: spk.date,
+      year: profile.year,
+      items,
+      firstPartyName: spk.firstPartyName,
+      secondPartyName: profile.bendaharaRt,
+    };
+
+    setHonorReceipts((prev) => [newHonorReceipt, ...prev]);
+    persistToCloud({ honorReceipts: [newHonorReceipt, ...honorReceipts] });
+    
+    // Update SPK flag
+    const updatedSpk = { ...spk, isHonorGenerated: true };
+    setSpkRecords((prev) => prev.map(r => r.id === spk.id ? updatedSpk : r));
+    persistToCloud({ spkRecords: spkRecords.map(r => r.id === spk.id ? updatedSpk : r) });
+
+    setActiveTab('honor-receipt');
+    alert(`⚡ Tanda terima honor berhasil dibuat otomatis berdasarkan data SPK nomor ${spk.spkNumber}!`);
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col font-arial-narrow antialiased text-slate-800">
@@ -415,7 +549,28 @@ export default function App() {
           <MusyawarahManager
             records={musyawarahRecords}
             onAddRecord={handleAddMusyawarah}
+            onDeleteRecord={handleDeleteMusyawarah}
             profile={profile}
+          />
+        )}
+ 
+        {activeTab === 'spk' && (
+          <SpkGenerator
+            profile={profile}
+            records={spkRecords}
+            onAddRecord={handleAddSpk}
+            onUpdateRecord={handleUpdateSpk}
+            onDeleteRecord={handleDeleteSpk}
+            onGenerateHonor={handleGenerateHonorFromSpk}
+          />
+        )}
+
+        {activeTab === 'honor-receipt' && (
+          <HonorReceiptGenerator
+            profile={profile}
+            records={honorReceipts}
+            onAddRecord={handleAddHonorReceipt}
+            onDeleteRecord={handleDeleteHonorReceipt}
           />
         )}
 

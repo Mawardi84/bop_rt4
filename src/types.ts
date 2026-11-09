@@ -125,4 +125,42 @@ export interface AttendeeItem {
   gender: 'L' | 'P';
 }
 
-export type ActiveTab = 'dashboard' | 'ba-kesepakatan' | 'rap' | 'sptjm' | 'surat' | 'pengambilan' | 'transactions' | 'reports' | 'spj-bulanan' | 'notulen' | 'musyawarah' | 'settings';
+export interface SpkRecord {
+  id: string;
+  spkNumber: string;
+  date: string;
+  contractorName?: string; // Legacy / Pimpinan
+  contractorAddress: string;
+  workDescription: string;
+  workLocation: string;
+  startDate: string;
+  endDate: string;
+  contractValue?: number; // Legacy
+  costPerWorker?: number; // Biaya per orang (Default 150rb)
+  firstPartyName: string; // Typically Ketua RT
+  secondPartyName: string; // Typically Worker/Contractor
+  workers: string[]; // List of workers
+  isHonorGenerated?: boolean; // Flag to track if integration has been triggered
+}
+
+export interface HonorReceiptItem {
+  id: string;
+  name: string;
+  position: string;
+  qty: number;
+  unit: string;
+  pricePerUnit: number;
+  total: number;
+}
+
+export interface HonorReceipt {
+  id: string;
+  activityName: string;
+  date: string;
+  year: number;
+  items: HonorReceiptItem[];
+  firstPartyName: string; // Ketua RT
+  secondPartyName: string; // Bendahara RT
+}
+
+export type ActiveTab = 'dashboard' | 'ba-kesepakatan' | 'rap' | 'sptjm' | 'surat' | 'pengambilan' | 'transactions' | 'reports' | 'spj-bulanan' | 'notulen' | 'musyawarah' | 'spk' | 'honor-receipt' | 'settings';

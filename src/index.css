@@ -38,6 +38,10 @@ body {
   line-height: 1.4;
 }
 
+.landscape-doc {
+  max-width: 1100px !important;
+}
+
 /* Ensure KOP logos have clean transparent background without box shadows */
 .official-doc img,
 .document-sheet img,
@@ -94,6 +98,14 @@ img[alt*="Logo"] {
     padding: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
+  }
+
+  .landscape-doc {
+    width: 297mm !important;
+    max-width: 297mm !important;
+    height: 210mm !important;
+    margin: 0 auto !important;
+    padding: 10mm 20mm !important;
   }
 
   /* Remove outer app container offsets */

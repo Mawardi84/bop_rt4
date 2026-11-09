@@ -1,4 +1,4 @@
-import { RtProfile, Transaction, MusyawarahRecord, RapItem, MonthlySpjRecord, CategoryDefinition, NotulenPreset, AttendeeItem } from '../types';
+import { RtProfile, Transaction, MusyawarahRecord, RapItem, MonthlySpjRecord, CategoryDefinition, NotulenPreset, AttendeeItem, SpkRecord, HonorReceipt } from '../types';
 import { SEMARANG_LOGO_DATA_URI } from './semarangLogoUri';
 
 export const DEFAULT_SEMARANG_LOGO = SEMARANG_LOGO_DATA_URI;
@@ -1519,5 +1519,74 @@ export const pkkNotulenPresets: NotulenPreset[] = [
     ],
     discussionNotes: 'Rapat PKK bulan Oktober 2026 membahas persiapan Pengajian Akbar Hari Santri Nasional di Masjid Al-Ijabah serta informasi perencanaan anggaran BOP PKK sebesar Rp 3 juta.',
     decisions: 'Seluruh warga dan ibu-ibu PKK berpartisipasi dalam Pengajian Akbar Hari Santri Nasional tanggal 25 Oktober 2026.'
+  }
+];
+export const initialSpkRecords: SpkRecord[] = [
+  {
+    id: 'spk-1',
+    spkNumber: '001/SPK-RT04/XI/2026',
+    date: '2026-10-25',
+    contractorAddress: 'RT 04 RW 04 Ngabean',
+    workDescription: 'Pekerjaan Pembuatan 25 Titik Lubang Resapan Biopori di Lingkungan RT 04 RW 04 Ngabean',
+    workLocation: 'Wilayah RT 04 RW 04 Ngabean Gunungpati',
+    startDate: '2026-11-01',
+    endDate: '2026-11-01',
+    costPerWorker: 150000,
+    firstPartyName: 'M. WAKHID NURJANAH',
+    secondPartyName: 'KARTO, SUKIRNO, SUBKHAN',
+    workers: ['KARTO', 'SUKIRNO', 'SUBKHAN', 'MUH ZAENUN']
+  },
+  {
+    id: 'spk-2',
+    spkNumber: '002/SPK-RT04/IX/2026',
+    date: '2026-09-08',
+    contractorAddress: 'RT 04 RW 04 Ngabean',
+    workDescription: 'Pekerjaan Pemeliharaan, Pemupukan, dan Penataan Ulang Tanaman Obat Keluarga (TOGA) RT 04',
+    workLocation: 'Taman Toga RT 04 Ngabean',
+    startDate: '2026-09-10',
+    endDate: '2026-09-11',
+    costPerWorker: 150000,
+    firstPartyName: 'M. WAKHID NURJANAH',
+    secondPartyName: 'KARTO, SUKIRNO, SUBKHAN',
+    workers: ['KARTO', 'SUKIRNO', 'SUBKHAN']
+  }
+];
+export const initialHonorReceipts: HonorReceipt[] = [
+  {
+    id: 'hr-1',
+    activityName: 'PEMBUATAN 25 TITIK LUBANG RESAPAN BIOPORI RT 04 RW 04 NGABEAN',
+    date: '2026-11-01',
+    year: 2026,
+    items: [
+      {
+        id: 'hri-1',
+        name: 'KARTO',
+        position: 'TUKANG / KOORDINATOR',
+        qty: 1,
+        unit: 'KEG',
+        pricePerUnit: 500000,
+        total: 500000
+      },
+      {
+        id: 'hri-2',
+        name: 'SUKIRNO',
+        position: 'PEKERJA 1',
+        qty: 1,
+        unit: 'KEG',
+        pricePerUnit: 300000,
+        total: 300000
+      },
+      {
+        id: 'hri-3',
+        name: 'SUBKHAN',
+        position: 'PEKERJA 2',
+        qty: 1,
+        unit: 'KEG',
+        pricePerUnit: 300000,
+        total: 300000
+      }
+    ],
+    firstPartyName: 'M. WAKHID NURJANAH',
+    secondPartyName: 'MUHAMMAD ERVAN'
   }
 ];
