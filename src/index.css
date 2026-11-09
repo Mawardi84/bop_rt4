@@ -61,8 +61,8 @@ img[alt*="Logo"] {
   }
 
   @page {
-    size: 215.9mm 330.2mm;
-    margin: 10mm 20mm;
+    size: A4 portrait;
+    margin: 8mm 12mm;
   }
 
   html,

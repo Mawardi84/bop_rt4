@@ -214,59 +214,58 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
     const reportNum = rec.reportNumber || tempReportNumber;
     const reportDt = rec.reportDate || tempReportDate || rec.endDate || rec.date;
     const secretaryName = rec.reportSecretaryName || tempReportSecretary || profile.sekretaris || 'MUH ZAENUN';
-    const progressVal = rec.reportProgress ?? tempReportProgress ?? 100;
     const notesVal = rec.reportNotes || tempReportNotes;
     const workerCount = rec.workers?.length || 1;
     const costPerPerson = rec.costPerWorker || 150000;
     const totalLaborCost = workerCount * costPerPerson;
 
     return (
-      <div className={`bg-white p-8 sm:p-14 rounded-2xl border border-slate-200 shadow-sm mx-auto text-slate-900 leading-relaxed font-arial-narrow official-doc ${isLandscape ? 'landscape-doc max-w-5xl' : 'max-w-3xl'}`}>
+      <div className={`bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm mx-auto text-slate-900 leading-snug font-arial-narrow official-doc print:p-0 print:border-none print:shadow-none print-one-page ${isLandscape ? 'landscape-doc max-w-5xl' : 'max-w-3xl'}`}>
         {/* Kop Surat Resmi */}
-        <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4 mb-6">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 flex items-center justify-center">
+        <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2 mb-3">
+          <div className="w-16 h-16 sm:w-18 sm:h-18 shrink-0 flex items-center justify-center">
             <img src={profile.logoUrl || DEFAULT_SEMARANG_LOGO} alt="Logo Semarang" className="w-full h-full object-contain" />
           </div>
           <div className="text-center grow px-2">
-            <div className="text-[13px] sm:text-[14px] font-bold uppercase leading-tight text-slate-900">PEMERINTAH KOTA SEMARANG</div>
-            <div className="text-[13px] sm:text-[14px] font-bold uppercase leading-tight text-slate-900">KECAMATAN {profile.kecamatan}</div>
-            <div className="text-[13px] sm:text-[14px] font-bold uppercase leading-tight text-slate-900">KELURAHAN {profile.kelurahan}</div>
-            <div className="text-[18px] sm:text-[20px] font-bold uppercase leading-tight mt-1 text-slate-900">RUKUN TETANGGA {profile.rtNumber} RUKUN WARGA {profile.rwNumber}</div>
-            <p className="text-[9px] sm:text-[10px] text-slate-600 mt-0.5">Alamat: Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kel. {profile.kelurahan} Kec. {profile.kecamatan} Kota Semarang</p>
+            <div className="text-[12px] sm:text-[13px] font-bold uppercase leading-tight text-slate-900">PEMERINTAH KOTA SEMARANG</div>
+            <div className="text-[12px] sm:text-[13px] font-bold uppercase leading-tight text-slate-900">KECAMATAN {profile.kecamatan}</div>
+            <div className="text-[12px] sm:text-[13px] font-bold uppercase leading-tight text-slate-900">KELURAHAN {profile.kelurahan}</div>
+            <div className="text-[16px] sm:text-[18px] font-bold uppercase leading-tight mt-0.5 text-slate-900">RUKUN TETANGGA {profile.rtNumber} RUKUN WARGA {profile.rwNumber}</div>
+            <p className="text-[9px] sm:text-[10px] text-slate-600">Alamat: Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kel. {profile.kelurahan} Kec. {profile.kecamatan} Kota Semarang</p>
           </div>
-          <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0" />
+          <div className="w-16 h-16 sm:w-18 sm:h-18 shrink-0" />
         </div>
 
         {/* Judul Dokumen */}
-        <div className="text-center mb-6">
-          <h2 className="text-base sm:text-lg font-black uppercase underline underline-offset-4 text-slate-900">
+        <div className="text-center mb-3">
+          <h2 className="text-sm sm:text-base font-black uppercase underline underline-offset-2 text-slate-900">
             LAPORAN PELAKSANAAN KEGIATAN SURAT PERINTAH KERJA (SPK)
           </h2>
-          <p className="text-xs sm:text-sm font-bold mt-1 text-slate-900">
+          <p className="text-xs sm:text-sm font-bold mt-0.5 text-slate-900">
             Nomor: {reportNum}
           </p>
         </div>
 
         {/* Informasi Ringkas / Pengantar */}
-        <div className="space-y-5 text-xs sm:text-sm text-slate-900">
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 sm:p-4 text-xs">
+        <div className="space-y-2.5 text-xs sm:text-[13px] text-slate-900 leading-snug">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs">
             <table className="w-full border-collapse">
               <tbody>
                 <tr>
-                  <td className="w-32 py-1 font-bold text-slate-700 align-top">Kepada Yth.</td>
-                  <td className="py-1 align-top">: <strong>Ketua RT {profile.rtNumber} RW {profile.rwNumber} Ngabean</strong> ({rec.firstPartyName || profile.ketuaRt})</td>
+                  <td className="w-28 py-0.5 font-bold text-slate-700 align-top">Kepada Yth.</td>
+                  <td className="py-0.5 align-top">: <strong>Ketua RT {profile.rtNumber} RW {profile.rwNumber} Ngabean</strong> ({rec.firstPartyName || profile.ketuaRt})</td>
                 </tr>
                 <tr>
-                  <td className="w-32 py-1 font-bold text-slate-700 align-top">Dari</td>
-                  <td className="py-1 align-top">: <strong>Sekretaris RT {profile.rtNumber} RW {profile.rwNumber} Ngabean</strong> ({secretaryName})</td>
+                  <td className="w-28 py-0.5 font-bold text-slate-700 align-top">Dari</td>
+                  <td className="py-0.5 align-top">: <strong>Sekretaris RT {profile.rtNumber} RW {profile.rwNumber} Ngabean</strong> ({secretaryName})</td>
                 </tr>
                 <tr>
-                  <td className="w-32 py-1 font-bold text-slate-700 align-top">Perihal</td>
-                  <td className="py-1 align-top">: Laporan Pertanggungjawaban Pelaksanaan SPK Swakelola Kegiatan RT</td>
+                  <td className="w-28 py-0.5 font-bold text-slate-700 align-top">Perihal</td>
+                  <td className="py-0.5 align-top">: Laporan Hasil Pelaksanaan SPK Swakelola Kegiatan RT</td>
                 </tr>
                 <tr>
-                  <td className="w-32 py-1 font-bold text-slate-700 align-top">Rujukan SPK</td>
-                  <td className="py-1 align-top">: Nomor: <strong>{rec.spkNumber}</strong> tertanggal <strong>{formatDate(rec.date)}</strong></td>
+                  <td className="w-28 py-0.5 font-bold text-slate-700 align-top">Rujukan SPK</td>
+                  <td className="py-0.5 align-top">: Nomor: <strong>{rec.spkNumber}</strong> tertanggal <strong>{formatDate(rec.date)}</strong></td>
                 </tr>
               </tbody>
             </table>
@@ -277,74 +276,74 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
           </p>
 
           {/* I. Rincian Pekerjaan */}
-          <div className="space-y-2">
-            <h3 className="font-bold text-slate-900 border-b border-slate-300 pb-1 flex items-center gap-1.5 uppercase text-xs tracking-wider">
+          <div className="space-y-1">
+            <h3 className="font-bold text-slate-900 border-b border-slate-300 pb-0.5 flex items-center gap-1.5 uppercase text-xs tracking-wider">
               <span>I. URAIAN PEKERJAAN & LOKASI</span>
             </h3>
-            <table className="w-full border-collapse text-xs sm:text-sm">
+            <table className="w-full border-collapse text-xs">
               <tbody>
                 <tr>
-                  <td className="w-40 py-1.5 font-bold align-top">Jenis / Uraian Tugas</td>
-                  <td className="py-1.5 align-top">: <strong>{rec.workDescription}</strong></td>
+                  <td className="w-36 py-0.5 font-bold align-top">Jenis / Uraian Tugas</td>
+                  <td className="py-0.5 align-top">: <strong>{rec.workDescription}</strong></td>
                 </tr>
                 <tr>
-                  <td className="w-40 py-1.5 font-bold align-top">Lokasi Pekerjaan</td>
-                  <td className="py-1.5 align-top">: {rec.workLocation}</td>
+                  <td className="w-36 py-0.5 font-bold align-top">Lokasi Pekerjaan</td>
+                  <td className="py-0.5 align-top">: {rec.workLocation}</td>
                 </tr>
                 <tr>
-                  <td className="w-40 py-1.5 font-bold align-top">Waktu Pelaksanaan</td>
-                  <td className="py-1.5 align-top">: {formatDate(rec.startDate)} s/d {formatDate(rec.endDate)}</td>
+                  <td className="w-36 py-0.5 font-bold align-top">Waktu Pelaksanaan</td>
+                  <td className="py-0.5 align-top">: {formatDate(rec.startDate)} s/d {formatDate(rec.endDate)}</td>
                 </tr>
                 <tr>
-                  <td className="w-40 py-1.5 font-bold align-top">Metode Pelaksanaan</td>
-                  <td className="py-1.5 align-top">: Swakelola Partisipatif Warga RT {profile.rtNumber} RW {profile.rwNumber}</td>
+                  <td className="w-36 py-0.5 font-bold align-top">Metode Pelaksanaan</td>
+                  <td className="py-0.5 align-top">: Swakelola Partisipatif Warga RT {profile.rtNumber} RW {profile.rwNumber}</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           {/* II. Tenaga Kerja & Honorarium */}
-          <div className="space-y-2 pt-1">
-            <h3 className="font-bold text-slate-900 border-b border-slate-300 pb-1 flex items-center justify-between uppercase text-xs tracking-wider">
+          <div className="space-y-1 pt-0.5">
+            <h3 className="font-bold text-slate-900 border-b border-slate-300 pb-0.5 flex items-center justify-between uppercase text-xs tracking-wider">
               <span>II. TENAGA KERJA PELAKSANA & DUKUNGAN ANGGARAN</span>
               <span className="text-[11px] font-normal text-slate-500 normal-case">Total: {workerCount} Orang</span>
             </h3>
 
             <div className="overflow-x-auto">
-              <table className="w-full border border-slate-400 border-collapse text-xs mt-2 text-center">
+              <table className="w-full border border-slate-400 border-collapse text-xs mt-1 text-center">
                 <thead>
                   <tr className="bg-slate-100 font-bold border-b border-slate-400">
-                    <th className="border border-slate-400 px-2 py-1.5 w-10">No</th>
-                    <th className="border border-slate-400 px-3 py-1.5 text-left">Nama Tenaga Kerja Ditunjuk</th>
-                    <th className="border border-slate-400 px-3 py-1.5 text-left">Alamat / Lingkungan</th>
-                    <th className="border border-slate-400 px-3 py-1.5 text-right w-32">Honorarium</th>
-                    <th className="border border-slate-400 px-2 py-1.5 w-24">Status Kerja</th>
+                    <th className="border border-slate-400 px-2 py-1 w-8">No</th>
+                    <th className="border border-slate-400 px-3 py-1 text-left">Nama Tenaga Kerja Ditunjuk</th>
+                    <th className="border border-slate-400 px-3 py-1 text-left">Alamat / Lingkungan</th>
+                    <th className="border border-slate-400 px-3 py-1 text-right w-28">Honorarium</th>
+                    <th className="border border-slate-400 px-2 py-1 w-20">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(rec.workers || []).map((worker, idx) => (
                     <tr key={idx} className="border-b border-slate-300">
-                      <td className="border border-slate-300 px-2 py-1.5">{idx + 1}</td>
-                      <td className="border border-slate-300 px-3 py-1.5 text-left font-bold">{worker}</td>
-                      <td className="border border-slate-300 px-3 py-1.5 text-left text-slate-600">
+                      <td className="border border-slate-300 px-2 py-1">{idx + 1}</td>
+                      <td className="border border-slate-300 px-3 py-1 text-left font-bold">{worker}</td>
+                      <td className="border border-slate-300 px-3 py-1 text-left text-slate-600">
                         {rec.contractorAddress || `RT ${profile.rtNumber} RW ${profile.rwNumber} Ngabean`}
                       </td>
-                      <td className="border border-slate-300 px-3 py-1.5 text-right font-medium">
+                      <td className="border border-slate-300 px-3 py-1 text-right font-medium">
                         {formatRupiah(costPerPerson)}
                       </td>
-                      <td className="border border-slate-300 px-2 py-1.5 text-emerald-700 font-semibold">
+                      <td className="border border-slate-300 px-2 py-1 text-emerald-700 font-semibold">
                         Selesai
                       </td>
                     </tr>
                   ))}
                   <tr className="bg-slate-50 font-bold border-t border-slate-400">
-                    <td colSpan={3} className="border border-slate-400 px-3 py-2 text-right uppercase">
+                    <td colSpan={3} className="border border-slate-400 px-3 py-1.5 text-right uppercase">
                       Total Alokasi Honorarium Tenaga Kerja:
                     </td>
-                    <td className="border border-slate-400 px-3 py-2 text-right text-indigo-950 font-black">
+                    <td className="border border-slate-400 px-3 py-1.5 text-right text-indigo-950 font-black">
                       {formatRupiah(totalLaborCost)}
                     </td>
-                    <td className="border border-slate-400 px-2 py-2 text-slate-600">
+                    <td className="border border-slate-400 px-2 py-1.5 text-slate-600">
                       Lunas
                     </td>
                   </tr>
@@ -352,31 +351,31 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
               </table>
             </div>
 
-            <div className="bg-amber-50/60 border border-amber-200 rounded-lg p-2.5 text-[11px] text-amber-900 leading-snug">
+            <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2 text-[10px] text-amber-900 leading-tight">
               <strong>Keterangan Swakelola:</strong> Seluruh penyediaan material, peralatan kerja, cat, semen, serta konsumsi kegiatan disediakan dan dibeli langsung oleh Pengurus RT dari pos belanja BOP RT (non-pihak ketiga/bukan borongan).
             </div>
           </div>
 
           {/* III. Evaluasi & Catatan Hasil Fisik */}
-          <div className="space-y-2 pt-1">
-            <h3 className="font-bold text-slate-900 border-b border-slate-300 pb-1 flex items-center gap-1.5 uppercase text-xs tracking-wider">
+          <div className="space-y-1 pt-0.5">
+            <h3 className="font-bold text-slate-900 border-b border-slate-300 pb-0.5 flex items-center gap-1.5 uppercase text-xs tracking-wider">
               <span>III. HASIL PELAKSANAAN & EVALUASI SEKRETARIS RT</span>
             </h3>
-            <div className="p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm leading-relaxed text-slate-800">
+            <div className="p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs leading-relaxed text-slate-800">
               <p className="whitespace-pre-line text-justify">{notesVal}</p>
             </div>
           </div>
 
           {/* Penutup */}
-          <p className="pt-2 text-justify">
+          <p className="pt-1 text-justify">
             Demikian laporan hasil pelaksanaan pekerjaan berdasarkan SPK ini dibuat dengan sebenar-benarnya untuk dipergunakan sebagai bahan pertanggungjawaban fisik dan kelengkapan berkas Surat Pertanggungjawaban (SPJ) Bantuan Operasional RT (BOP RT) Kelurahan {profile.kelurahan} Tahun Anggaran {profile.year}.
           </p>
         </div>
 
         {/* Tanda Tangan Ganda: Mengetahui Ketua RT & Pelapor Sekretaris RT */}
-        <div className="mt-10 grid grid-cols-2 gap-8 text-center text-xs sm:text-sm">
-          <div className="space-y-16">
-            <div className="space-y-1">
+        <div className="mt-6 grid grid-cols-2 gap-8 text-center text-xs sm:text-sm">
+          <div className="space-y-12">
+            <div className="space-y-0.5">
               <p className="text-slate-700">Mengetahui,</p>
               <div className="font-bold uppercase text-slate-900">
                 Ketua RT {profile.rtNumber} RW {profile.rwNumber}
@@ -389,8 +388,8 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
             </div>
           </div>
 
-          <div className="space-y-16">
-            <div className="space-y-1">
+          <div className="space-y-12">
+            <div className="space-y-0.5">
               <p className="text-slate-700">Semarang, {formatDate(reportDt)}</p>
               <div className="font-bold uppercase text-slate-900">
                 Sekretaris RT {profile.rtNumber} RW {profile.rwNumber}
@@ -410,96 +409,97 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
   // Render Official SPK Document
   const renderSpkDocument = (rec: SpkRecord) => {
     return (
-      <div className="bg-white p-10 sm:p-16 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto text-slate-900 leading-relaxed font-arial-narrow official-doc">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto text-slate-900 leading-snug font-arial-narrow official-doc print:p-0 print:border-none print:shadow-none print-one-page">
         {/* Kop Surat */}
-        <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4 mb-6">
-          <div className="w-24 h-24 shrink-0 flex items-center justify-center">
+        <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2 mb-3">
+          <div className="w-16 h-16 sm:w-18 sm:h-18 shrink-0 flex items-center justify-center">
             <img src={profile.logoUrl || DEFAULT_SEMARANG_LOGO} alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div className="text-center grow px-2">
-            <div className="text-[14px] font-bold uppercase leading-tight text-slate-900">PEMERINTAH KOTA SEMARANG</div>
-            <div className="text-[14px] font-bold uppercase leading-tight text-slate-900">KECAMATAN {profile.kecamatan}</div>
-            <div className="text-[14px] font-bold uppercase leading-tight text-slate-900">KELURAHAN {profile.kelurahan}</div>
-            <div className="text-[20px] font-bold uppercase leading-tight mt-1 text-slate-900">RUKUN TETANGGA {profile.rtNumber} RUKUN WARGA {profile.rwNumber}</div>
-            <p className="text-[10px] text-slate-600">Alamat: Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kel. {profile.kelurahan} Kec. {profile.kecamatan} Kota Semarang</p>
+            <div className="text-[12px] sm:text-[13px] font-bold uppercase leading-tight text-slate-900">PEMERINTAH KOTA SEMARANG</div>
+            <div className="text-[12px] sm:text-[13px] font-bold uppercase leading-tight text-slate-900">KECAMATAN {profile.kecamatan}</div>
+            <div className="text-[12px] sm:text-[13px] font-bold uppercase leading-tight text-slate-900">KELURAHAN {profile.kelurahan}</div>
+            <div className="text-[16px] sm:text-[18px] font-bold uppercase leading-tight mt-0.5 text-slate-900">RUKUN TETANGGA {profile.rtNumber} RUKUN WARGA {profile.rwNumber}</div>
+            <p className="text-[9px] sm:text-[10px] text-slate-600">Alamat: Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kel. {profile.kelurahan} Kec. {profile.kecamatan} Kota Semarang</p>
           </div>
-          <div className="w-24 h-24 shrink-0" />
+          <div className="w-16 h-16 sm:w-18 sm:h-18 shrink-0" />
         </div>
 
-        <div className="text-center mb-8">
-          <h2 className="text-base font-black uppercase underline underline-offset-2 text-slate-900">SURAT PERINTAH KERJA (SPK)</h2>
-          <p className="text-sm font-bold mt-1 text-slate-900">Nomor: {rec.spkNumber}</p>
+        <div className="text-center mb-3">
+          <h2 className="text-sm sm:text-base font-black uppercase underline underline-offset-2 text-slate-900">SURAT PERINTAH KERJA (SPK)</h2>
+          <p className="text-xs sm:text-sm font-bold mt-0.5 text-slate-900">Nomor: {rec.spkNumber}</p>
         </div>
 
-        <div className="space-y-6 text-sm text-slate-900">
+        <div className="space-y-2 text-xs sm:text-[13px] text-slate-900 leading-snug">
           <p>Pada hari ini, <strong>{formatDate(rec.date)}</strong>, yang bertanda tangan di bawah ini:</p>
           
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             <div className="flex">
-              <span className="w-8">I.</span>
+              <span className="w-6 font-bold">I.</span>
               <div className="flex-1">
-                <div className="flex"><span className="w-32 font-bold">Nama</span><span>: {rec.firstPartyName}</span></div>
-                <div className="flex"><span className="w-32 font-bold">Jabatan</span><span>: Ketua RT {profile.rtNumber} RW {profile.rwNumber}</span></div>
-                <p className="mt-1">Selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong> (Pemberi Kerja).</p>
+                <div className="flex"><span className="w-28 font-bold">Nama</span><span>: {rec.firstPartyName}</span></div>
+                <div className="flex"><span className="w-28 font-bold">Jabatan</span><span>: Ketua RT {profile.rtNumber} RW {profile.rwNumber}</span></div>
+                <p className="mt-0.5">Selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong> (Pemberi Kerja).</p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             <div className="flex">
-              <span className="w-8">II.</span>
+              <span className="w-6 font-bold">II.</span>
               <div className="flex-1">
                 <div className="flex">
-                  <span className="w-32 font-bold">Nama Pekerja</span>
+                  <span className="w-28 font-bold">Nama Pekerja</span>
                   <div className="flex-1">
-                    : {(rec.workers || []).map((w, i) => <div key={i}>{i+1}. {w}</div>)}
-                    {(rec.workers || []).length === 0 && rec.contractorName}
+                    : {(rec.workers || []).length > 0 
+                       ? rec.workers.map((w, i) => `${i + 1}. ${w}`).join('   |   ')
+                       : rec.contractorName}
                   </div>
                 </div>
-                <div className="flex mt-1"><span className="w-32 font-bold">Alamat</span><span>: {rec.contractorAddress || `RT ${profile.rtNumber} RW ${profile.rwNumber} Ngabean`}</span></div>
-                <p className="mt-1">Selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong> (Pelaksana Kerja).</p>
+                <div className="flex mt-0.5"><span className="w-28 font-bold">Alamat</span><span>: {rec.contractorAddress || `RT ${profile.rtNumber} RW ${profile.rwNumber} Ngabean`}</span></div>
+                <p className="mt-0.5">Selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong> (Pelaksana Kerja).</p>
               </div>
             </div>
           </div>
 
-          <p className="indent-8">
+          <p className="indent-6">
             <strong>PIHAK PERTAMA</strong> memberikan perintah kerja kepada <strong>PIHAK KEDUA</strong>, dan <strong>PIHAK KEDUA</strong> menyatakan bersedia melaksanakan pekerjaan sesuai dengan ketentuan sebagai berikut:
           </p>
 
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse my-1">
             <tbody>
               <tr>
-                <td className="w-40 py-1.5 font-bold align-top">Jenis Pekerjaan</td>
-                <td className="py-1.5 align-top">: {rec.workDescription}</td>
+                <td className="w-36 py-0.5 font-bold align-top">Jenis Pekerjaan</td>
+                <td className="py-0.5 align-top">: {rec.workDescription}</td>
               </tr>
               <tr>
-                <td className="w-40 py-1.5 font-bold align-top">Lokasi Pekerjaan</td>
-                <td className="py-1.5 align-top">: {rec.workLocation}</td>
+                <td className="w-36 py-0.5 font-bold align-top">Lokasi Pekerjaan</td>
+                <td className="py-0.5 align-top">: {rec.workLocation}</td>
               </tr>
               <tr>
-                <td className="w-40 py-1.5 font-bold align-top">Waktu Pelaksanaan</td>
-                <td className="py-1.5 align-top">: {formatDate(rec.startDate)} s/d {formatDate(rec.endDate)}</td>
+                <td className="w-36 py-0.5 font-bold align-top">Waktu Pelaksanaan</td>
+                <td className="py-0.5 align-top">: {formatDate(rec.startDate)} s/d {formatDate(rec.endDate)}</td>
               </tr>
             </tbody>
           </table>
 
-          <div className="space-y-4 pt-2">
-            <p className="font-bold underline italic">Pasal 1: Lingkup Pekerjaan & Penyediaan Material</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>PIHAK KEDUA wajib melaksanakan pekerjaan dengan sebaik-baiknya, tepat waktu, dan sesuai dengan spesifikasi yang telah disepakati.</li>
-              <li>Seluruh penyediaan <strong>bahan, material, dan peralatan kerja</strong> yang dibutuhkan untuk pekerjaan ini menjadi tanggung jawab dan disediakan sepenuhnya oleh <strong>PIHAK PERTAMA</strong> melalui dana BOP RT.</li>
-              <li>Nilai pembayaran upah kerja akan diberikan sesuai dengan tanda terima honorarium terpisah ({formatRupiah(rec.costPerWorker || 150000)} per orang).</li>
+          <div className="space-y-1 pt-0.5">
+            <p className="font-bold underline italic text-xs">Pasal 1: Lingkup Pekerjaan & Penyediaan Material</p>
+            <ul className="list-disc pl-4 space-y-0.5 text-xs">
+              <li>PIHAK KEDUA wajib melaksanakan pekerjaan dengan sebaik-baiknya, tepat waktu, dan sesuai spesifikasi arahan RT.</li>
+              <li>Seluruh penyediaan <strong>bahan, material, dan peralatan kerja</strong> disediakan dan ditanggung sepenuhnya oleh <strong>PIHAK PERTAMA</strong> melalui dana BOP RT Tahun Anggaran {profile.year}.</li>
+              <li>Upah kerja diberikan sesuai tanda terima honorarium terpisah ({formatRupiah(rec.costPerWorker || 150000)} per orang).</li>
             </ul>
             
-            <p className="font-bold underline italic text-xs mt-4">Pasal 2: Pembayaran</p>
-            <p>Pembayaran akan dilakukan oleh PIHAK PERTAMA kepada PIHAK KEDUA secara tunai setelah seluruh pekerjaan selesai dilaksanakan 100% dan diterima dengan baik oleh PIHAK PERTAMA, menggunakan dana Bantuan Operasional RT (BOP RT) Tahun Anggaran {profile.year}.</p>
+            <p className="font-bold underline italic text-xs mt-1.5">Pasal 2: Pembayaran</p>
+            <p className="text-xs">Pembayaran dilakukan secara tunai setelah seluruh pekerjaan selesai dilaksanakan 100% dan diterima dengan baik oleh PIHAK PERTAMA menggunakan dana BOP RT Tahun Anggaran {profile.year}.</p>
           </div>
 
-          <p className="pt-4 text-justify">Demikian Surat Perintah Kerja ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
+          <p className="pt-0.5 text-justify">Demikian Surat Perintah Kerja ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-8 text-center">
-          <div className="space-y-20">
+        <div className="mt-6 grid grid-cols-2 gap-8 text-center text-xs sm:text-sm">
+          <div className="space-y-12">
             <div className="text-sm font-bold uppercase text-slate-900">
               Pelaksana Pekerjaan
             </div>
@@ -509,8 +509,8 @@ export const SpkGenerator: React.FC<SpkGeneratorProps> = ({
               </div>
             </div>
           </div>
-          <div className="space-y-20">
-            <div className="space-y-1">
+          <div className="space-y-12">
+            <div className="space-y-0.5">
               <p className="text-sm text-slate-900">Semarang, {formatDate(rec.date)}</p>
               <div className="text-sm font-bold uppercase text-slate-900">
                 Ketua RT {profile.rtNumber} RW {profile.rwNumber}

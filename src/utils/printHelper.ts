@@ -32,13 +32,13 @@ export async function downloadElementAsPdf(
     // Check if target is landscape
     const isLandscape = el.classList.contains('landscape-doc') || !!el.querySelector('.landscape-doc');
 
-    // Render canvas from target DOM element using html2canvas-pro
+    // Render canvas from target DOM element using html2canvas-pro with exact A4 pixel widths
     const canvas = await html2canvas(el, {
       scale: 2, // High DPI for clear text
       useCORS: true,
       logging: false,
       backgroundColor: '#ffffff',
-      windowWidth: isLandscape ? 1180 : 800,
+      windowWidth: isLandscape ? 1120 : 794,
       onclone: (clonedDoc) => {
         // Inject clean print styles into cloned document
         const style = clonedDoc.createElement('style');
@@ -48,11 +48,16 @@ export async function downloadElementAsPdf(
             display: none !important;
           }
           
-          /* Clean white background and solid borders for documents */
+          /* Clean white background, no outer borders or giant screen paddings */
           .official-doc, .document-sheet, .print-document {
             background-color: #ffffff !important;
             box-shadow: none !important;
-            border-color: #e2e8f0 !important;
+            border: none !important;
+            padding: 16px 24px !important;
+            margin: 0 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
           }
           
           /* Force solid standard colors to avoid any edge cases */
@@ -80,14 +85,6 @@ export async function downloadElementAsPdf(
           .bg-slate-50 { background-color: #f8fafc !important; }
           .border-slate-200 { border-color: #e2e8f0 !important; }
           .border-black { border-color: #000000 !important; }
-          
-          /* Catch-all for any oklch variables that might remain */
-          :root {
-            --color-indigo-600: #4f46e5 !important;
-            --color-indigo-50: #eef2ff !important;
-            --color-slate-900: #0f172a !important;
-            --color-emerald-600: #059669 !important;
-          }
         `;
         clonedDoc.head.appendChild(style);
       }
@@ -102,22 +99,32 @@ export async function downloadElementAsPdf(
 
     const pdfWidth = isLandscape ? 297 : 210; // A4 dimensions
     const pdfHeight = isLandscape ? 210 : 297;
-    const imgWidth = pdfWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let imgWidth = pdfWidth;
+    let imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let heightLeft = imgHeight;
-    let position = 0;
+    // Smart 1-page fit: If content height slightly exceeds 1 page (within 18%),
+    // scale it cleanly so single-page documents don't spill a few lines onto page 2
+    if (imgHeight > (pdfHeight - 10) && imgHeight <= pdfHeight * 1.18) {
+      const scale = (pdfHeight - 12) / imgHeight;
+      imgWidth = imgWidth * scale;
+      imgHeight = imgHeight * scale;
+      const xOffset = (pdfWidth - imgWidth) / 2;
+      pdf.addImage(imgData, 'JPEG', xOffset, 6, imgWidth, imgHeight);
+    } else {
+      let heightLeft = imgHeight;
+      let position = 0;
 
-    // First page
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pdfHeight;
-
-    // Multi-page document handling (buffer of 8mm to prevent stray blank pages)
-    while (heightLeft > 8) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
+      // First page
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
+
+      // Multi-page document handling (buffer of 10mm to prevent stray blank pages)
+      while (heightLeft > 10) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
+      }
     }
 
     const safeFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
@@ -142,18 +149,15 @@ export function executePrint(title?: string): void {
   const targetEl = document.querySelector('.official-doc, .document-sheet, .print-document, main');
   const isLandscape = targetEl?.classList.contains('landscape-doc') || !!document.querySelector('.landscape-doc');
 
-  let dynamicStyle: HTMLStyleElement | null = null;
-  if (isLandscape) {
-    dynamicStyle = document.createElement('style');
-    dynamicStyle.id = 'dynamic-print-page-style';
-    dynamicStyle.innerHTML = `
-      @page {
-        size: A4 landscape !important;
-        margin: 8mm 12mm !important;
-      }
-    `;
-    document.head.appendChild(dynamicStyle);
-  }
+  const dynamicStyle = document.createElement('style');
+  dynamicStyle.id = 'dynamic-print-page-style';
+  dynamicStyle.innerHTML = `
+    @page {
+      size: A4 ${isLandscape ? 'landscape' : 'portrait'} !important;
+      margin: 8mm 12mm !important;
+    }
+  `;
+  document.head.appendChild(dynamicStyle);
 
   try {
     window.focus();
