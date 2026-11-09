@@ -199,7 +199,9 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
   const [undanganPenutupCustom, setUndanganPenutupCustom] = useState<string>('');
   const [undanganCatatan, setUndanganCatatan] = useState<string>('');
   const [showAgendaDetailsInUndangan, setShowAgendaDetailsInUndangan] = useState<boolean>(false);
-  const [undanganLayout, setUndanganLayout] = useState<'1-halaman' | '2-in-1'>('1-halaman');
+  const [undanganLayout, setUndanganLayout] = useState<'landscape-2in1' | 'landscape-1' | '1-halaman' | '2-in-1'>('landscape-2in1');
+  const [undanganSignatureMode, setUndanganSignatureMode] = useState<'ketua-saja' | 'ketua-sekretaris'>('ketua-saja');
+  const [daftarHadirOrientation, setDaftarHadirOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [undanganDateCustom, setUndanganDateCustom] = useState<string>('');
 
   // Notulen specific states: daftar peserta hadir tidak dicantumkan di lembar notulen (default: false)
@@ -580,21 +582,21 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
   const currentSalamPembuka = undanganSalamPembuka || 'Assalamualaikum Wr.Wb.';
   const currentSalamPenutup = undanganSalamPenutup || 'Wassalamuailikum Wr.Wb.';
 
-  const renderUndanganBody = (isCompact: boolean = false) => {
-    const kopTitleSize = isCompact ? 'text-[11px] print:text-[10px]' : 'text-[13px] print:text-[13px]';
-    const kopSubSize = isCompact ? 'text-[9.5px] print:text-[9px]' : 'text-[12px] print:text-[12px]';
+  const renderUndanganBody = (isCompact: boolean = false, isLandscape2in1: boolean = false) => {
+    const kopTitleSize = isCompact ? 'text-[11px] print:text-[10px]' : 'text-[13px] print:text-[12.5px]';
+    const kopSubSize = isCompact ? 'text-[9px] print:text-[8.5px]' : 'text-[12px] print:text-[11.5px]';
     const kopRtSize = isCompact ? 'text-[13px] print:text-[12px]' : 'text-[16px] print:text-[15px]';
-    const kopAddressSize = isCompact ? 'text-[8px] print:text-[7.5px]' : 'text-[9.5px] print:text-[9px]';
-    const logoSize = isCompact ? 'w-16 h-16 print:w-16 print:h-16' : 'w-24 h-24 sm:w-26 sm:h-26 print:w-24 print:h-24';
-    const textSize = isCompact ? 'text-[10.5px] print:text-[9.5px]' : 'text-[13px] print:text-[12.5px]';
-    const spacingClass = isCompact ? 'space-y-2' : 'space-y-3.5';
+    const kopAddressSize = isCompact ? 'text-[7.5px] print:text-[7px]' : 'text-[9.5px] print:text-[8.5px]';
+    const logoSize = isCompact ? 'w-14 h-14 print:w-14 print:h-14' : 'w-20 h-20 print:w-20 print:h-20';
+    const textSize = isCompact ? 'text-[10px] print:text-[9.5px]' : 'text-[12px] print:text-[11.5px]';
+    const spacingClass = isCompact ? 'space-y-1.5' : 'space-y-2.5';
     const tablePadding = isCompact ? 'py-0.5' : 'py-1';
-    const ttdHeight = isCompact ? 'h-12 print:h-11' : 'h-20 print:h-18';
+    const ttdHeight = isCompact ? 'h-9 print:h-8' : 'h-14 print:h-12';
 
     return (
       <div className={`text-slate-900 leading-normal ${spacingClass}`}>
         {/* KOP Surat Resmi */}
-        <div className="flex items-center justify-between border-b-4 border-double border-slate-900 pb-2 mb-3">
+        <div className="flex items-center justify-between border-b-4 border-double border-slate-900 pb-2 mb-2">
           <div className={`${logoSize} flex-shrink-0 flex items-center justify-center`}>
             <img 
               src={meetingType === 'pkk' ? (profile.pkkLogoUrl || profile.logoUrl || DEFAULT_SEMARANG_LOGO) : (profile.logoUrl || DEFAULT_SEMARANG_LOGO)} 
@@ -605,41 +607,35 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
           <div className="text-center flex-grow px-2">
             {meetingType === 'rt' ? (
               <>
-                <div className="text-[14px] font-bold uppercase text-slate-900 leading-tight">
+                <div className={`${kopTitleSize} font-bold uppercase text-slate-900 leading-tight`}>
                   PEMERINTAH KOTA SEMARANG
                 </div>
-                <div className="text-[14px] font-bold uppercase text-slate-900 leading-tight">
-                  KECAMATAN {profile.kecamatan}
+                <div className={`${kopSubSize} font-bold uppercase text-slate-900 leading-tight`}>
+                  KECAMATAN {profile.kecamatan} • KELURAHAN {profile.kelurahan}
                 </div>
-                <div className="text-[14px] font-bold uppercase text-slate-900 leading-tight">
-                  KELURAHAN {profile.kelurahan}
-                </div>
-                <div className="text-[18px] font-bold uppercase text-slate-900 leading-tight mt-1">
+                <div className={`${kopRtSize} font-black uppercase text-slate-900 leading-tight mt-0.5`}>
                   RT {profile.rtNumber} RW {profile.rwNumber}
                 </div>
               </>
             ) : (
               <>
-                <div className="text-[16px] font-bold uppercase text-slate-900 leading-tight">
-                  PEMBERDAYAAN KESEJAHTERAAN KELUARGA<br/>(PKK)
+                <div className={`${kopTitleSize} font-bold uppercase text-slate-900 leading-tight`}>
+                  PEMBERDAYAAN KESEJAHTERAAN KELUARGA (PKK)
                 </div>
-                <div className="text-[16px] font-bold uppercase text-slate-900 leading-tight mt-1">
-                  RUKUN TETANGGA {profile.rtNumber} RUKUN WARGA {profile.rwNumber}
+                <div className={`${kopRtSize} font-black uppercase text-slate-900 leading-tight mt-0.5`}>
+                  RT {profile.rtNumber} RW {profile.rwNumber}
                 </div>
-                <div className="text-[16px] font-bold uppercase text-slate-900 leading-tight">
+                <div className={`${kopSubSize} font-bold uppercase text-slate-900 leading-tight`}>
                   KELURAHAN {profile.kelurahan} KECAMATAN {profile.kecamatan}
-                </div>
-                <div className="text-[16px] font-bold uppercase text-slate-900 leading-tight">
-                  KOTA SEMARANG
                 </div>
               </>
             )}
-            <p className="text-[10px] text-slate-800 leading-tight mt-1">
-              Alamat: Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kelurahan {profile.kelurahan}
+            <p className={`${kopAddressSize} text-slate-800 leading-tight mt-0.5`}>
+              Alamat: Kp. Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kelurahan {profile.kelurahan}
             </p>
           </div>
           <div className={`${logoSize} flex-shrink-0 flex items-center justify-center opacity-0 print:opacity-0`}>
-            <div className="w-12 h-12"></div>
+            <div className="w-10 h-10"></div>
           </div>
         </div>
 
@@ -651,62 +647,61 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         {/* Baris Nomor, Lampiran, Perihal */}
         <div className={`space-y-0.5 ${textSize}`}>
           <div className="flex">
-            <span className="w-20 sm:w-24 font-semibold">Nomor</span>
-            <span className="w-4">:</span>
+            <span className="w-18 sm:w-22 font-semibold">Nomor</span>
+            <span className="w-3">:</span>
             <span className="font-medium">{currentNomorSurat || '-'}</span>
           </div>
           <div className="flex">
-            <span className="w-20 sm:w-24 font-semibold">Lampiran</span>
-            <span className="w-4">:</span>
+            <span className="w-18 sm:w-22 font-semibold">Lampiran</span>
+            <span className="w-3">:</span>
             <span>-</span>
           </div>
           <div className="flex">
-            <span className="w-20 sm:w-24 font-semibold">Perihal</span>
-            <span className="w-4">:</span>
+            <span className="w-18 sm:w-22 font-semibold">Perihal</span>
+            <span className="w-3">:</span>
             <span className="font-bold underline">{currentHalSurat}</span>
           </div>
         </div>
 
         {/* Kepada Yth. Berada Tepat di Bawah Nomor Surat */}
-        <div className={`${isCompact ? 'mt-2.5' : 'mt-4'} ${textSize}`}>
+        <div className={`${isCompact ? 'mt-2' : 'mt-3'} ${textSize}`}>
           <p>Kepada Yth.</p>
           <p className="font-bold">{currentPenerima}</p>
-          <p>di -</p>
-          <p className="pl-4 font-semibold">Tempat</p>
+          <p>Di Tempat</p>
         </div>
 
         {/* Isi Surat */}
-        <div className={`text-justify leading-relaxed mt-4 ${textSize}`}>
-          <p className="mb-2 font-bold">{currentSalamPembuka}</p>
-          <p className="mb-2 whitespace-pre-line">{currentPengantar}</p>
+        <div className={`text-justify leading-relaxed ${isCompact ? 'mt-2' : 'mt-3'} ${textSize}`}>
+          <p className="mb-1 font-bold">{currentSalamPembuka}</p>
+          <p className="mb-1 whitespace-pre-line">{currentPengantar}</p>
           
-          <table className={`w-11/12 mx-auto my-3 font-semibold ${tablePadding}`}>
+          <table className={`w-full max-w-[95%] mx-auto my-2 font-semibold ${tablePadding}`}>
             <tbody>
               <tr>
-                <td className="w-32 py-1">Hari, Tanggal</td>
-                <td className="w-4 py-1">:</td>
-                <td className="py-1">{formatDateWithDay(date)}</td>
+                <td className="w-28 py-0.5 align-top">Hari, Tanggal</td>
+                <td className="w-3 py-0.5 align-top">:</td>
+                <td className="py-0.5 align-top font-bold">{formatDateWithDay(date)}</td>
               </tr>
               <tr>
-                <td className="py-1">Waktu</td>
-                <td className="py-1">:</td>
-                <td className="py-1">{time}</td>
+                <td className="py-0.5 align-top">Waktu / Jam</td>
+                <td className="py-0.5 align-top">:</td>
+                <td className="py-0.5 align-top font-bold">{time}</td>
               </tr>
               <tr>
-                <td className="py-1 align-top">Tempat</td>
-                <td className="py-1 align-top">:</td>
-                <td className="py-1 leading-normal font-bold">{location}</td>
+                <td className="py-0.5 align-top">Tempat</td>
+                <td className="py-0.5 align-top">:</td>
+                <td className="py-0.5 leading-normal font-bold">{location}</td>
               </tr>
               <tr>
-                <td className="py-1 align-top">Agenda</td>
-                <td className="py-1 align-top">:</td>
-                <td className="py-1 leading-normal font-bold">{currentAcara}</td>
+                <td className="py-0.5 align-top">Agenda</td>
+                <td className="py-0.5 align-top">:</td>
+                <td className="py-0.5 leading-normal font-bold">{currentAcara}</td>
               </tr>
               {showAgendaDetailsInUndangan && (
                 <tr>
-                  <td className="py-1 align-top">Detail Agenda</td>
-                  <td className="py-1 align-top">:</td>
-                  <td className="py-1 font-normal text-[11px] print:text-[10px]">
+                  <td className="py-0.5 align-top">Detail Agenda</td>
+                  <td className="py-0.5 align-top">:</td>
+                  <td className="py-0.5 font-normal text-[10px] print:text-[9px]">
                     <ul className="list-disc pl-4 space-y-0.5">
                       {agendaItems.map((ag, i) => (
                          <li key={i}>{ag}</li>
@@ -719,31 +714,191 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
           </table>
 
           {undanganCatatan && (
-            <div className="mb-2 p-2 border-l-2 border-slate-900 bg-slate-50 text-[10px] print:text-[9.5px]">
-              <span className="font-bold">Catatan Tambahan:</span><br/>
+            <div className="mb-1.5 p-1.5 border-l-2 border-slate-900 bg-slate-50 text-[9.5px] print:text-[9px]">
+              <span className="font-bold">Catatan:</span>{' '}
               <span className="whitespace-pre-line">{undanganCatatan}</span>
             </div>
           )}
 
-          <p className="mb-4 whitespace-pre-line">{currentPenutup}</p>
+          <p className="mb-2 whitespace-pre-line">{currentPenutup}</p>
           <p className="font-bold">{currentSalamPenutup}</p>
         </div>
 
         {/* Tanda Tangan */}
-        <div className="mt-6 pt-2 flex justify-between text-center gap-4">
-          <div className="w-48 text-center">
-            <p className="font-bold uppercase text-[12px] print:text-[11px]">
-              {meetingType === 'rt' ? `Sekretaris RT ${profile.rtNumber}` : `Sekretaris PKK RT ${profile.rtNumber}`}
+        <div className={`mt-3 pt-1 flex ${undanganSignatureMode === 'ketua-saja' ? 'justify-end' : 'justify-between'} text-center gap-4 print-avoid-break`}>
+          {undanganSignatureMode !== 'ketua-saja' && (
+            <div className={`${isCompact ? 'w-36' : 'w-44'} text-center`}>
+              <p className={`font-bold uppercase ${isCompact ? 'text-[10px] print:text-[9px]' : 'text-[11.5px] print:text-[10.5px]'}`}>
+                {meetingType === 'rt' ? `Sekretaris RT ${profile.rtNumber}` : `Sekretaris PKK RT ${profile.rtNumber}`}
+              </p>
+              <div className={ttdHeight}></div>
+              <p className={`font-extrabold underline uppercase ${isCompact ? 'text-[10px] print:text-[9px]' : 'text-[11.5px] print:text-[10.5px]'}`}>{secretary}</p>
+            </div>
+          )}
+          <div className={`${isCompact ? 'w-44' : 'w-52'} text-center`}>
+            <p className={`font-bold uppercase leading-tight ${isCompact ? 'text-[10.5px] print:text-[9.5px]' : 'text-[11.5px] print:text-[10.5px]'}`}>
+              {meetingType === 'rt' ? `KETUA RT. ${profile.rtNumber} RW. ${profile.rwNumber}` : `KETUA PKK RT ${profile.rtNumber}`}
+            </p>
+            <p className={`font-semibold uppercase leading-tight text-slate-700 ${isCompact ? 'text-[9px] print:text-[8.5px]' : 'text-[10px] print:text-[9.5px]'}`}>
+              {meetingType === 'rt' ? `KELURAHAN ${profile.kelurahan}` : `KEL. ${profile.kelurahan}`}
             </p>
             <div className={ttdHeight}></div>
-            <p className="font-extrabold underline uppercase text-[12px] print:text-[11px]">{secretary}</p>
+            <p className={`font-extrabold underline uppercase ${isCompact ? 'text-[10.5px] print:text-[9.5px]' : 'text-[11.5px] print:text-[10.5px]'}`}>({leader})</p>
           </div>
-          <div className="w-48 text-center">
-            <p className="font-bold uppercase text-[12px] print:text-[11px]">
-              {meetingType === 'rt' ? `Ketua RT ${profile.rtNumber}` : `Ketua PKK RT ${profile.rtNumber}`}
+        </div>
+      </div>
+    );
+  };
+
+  const renderUndanganLandscapeSingle = () => {
+    return (
+      <div className="text-slate-900 leading-normal space-y-4">
+        {/* KOP Surat Lebar Landscape */}
+        <div className="flex items-center justify-between border-b-4 border-double border-slate-900 pb-2 mb-3">
+          <div className="w-20 h-20 print:w-20 print:h-20 flex-shrink-0 flex items-center justify-center">
+            <img 
+              src={meetingType === 'pkk' ? (profile.pkkLogoUrl || profile.logoUrl || DEFAULT_SEMARANG_LOGO) : (profile.logoUrl || DEFAULT_SEMARANG_LOGO)} 
+              alt={meetingType === 'pkk' ? "Logo PKK" : "Logo Kota Semarang"} 
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="text-center flex-grow px-4">
+            {meetingType === 'rt' ? (
+              <>
+                <div className="text-[15px] font-bold uppercase text-slate-900 leading-tight">
+                  PEMERINTAH KOTA SEMARANG
+                </div>
+                <div className="text-[15px] font-bold uppercase text-slate-900 leading-tight">
+                  KECAMATAN {profile.kecamatan} • KELURAHAN {profile.kelurahan}
+                </div>
+                <div className="text-[19px] font-black uppercase text-slate-900 leading-tight mt-1">
+                  RUKUN TETANGGA {profile.rtNumber} RUKUN WARGA {profile.rwNumber} NGABEAN
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-[17px] font-bold uppercase text-slate-900 leading-tight">
+                  PEMBERDAYAAN KESEJAHTERAAN KELUARGA (PKK) RT {profile.rtNumber} RW {profile.rwNumber}
+                </div>
+                <div className="text-[15px] font-bold uppercase text-slate-900 leading-tight">
+                  KELURAHAN {profile.kelurahan} KECAMATAN {profile.kecamatan} KOTA SEMARANG
+                </div>
+              </>
+            )}
+            <p className="text-[11px] text-slate-800 leading-tight mt-1">
+              Alamat: Kp. Ngabean RT {profile.rtNumber} RW {profile.rwNumber} Kelurahan {profile.kelurahan} Kecamatan {profile.kecamatan}
             </p>
-            <div className={ttdHeight}></div>
-            <p className="font-extrabold underline uppercase text-[12px] print:text-[11px]">{leader}</p>
+          </div>
+          <div className="w-20 h-20 print:w-20 print:h-20 flex-shrink-0 opacity-0 print:opacity-0" />
+        </div>
+
+        {/* 2 Kolom Konten Landscape (Kiri: Detail & Jadwal, Kanan: Pengantar, Penutup, TTD) */}
+        <div className="grid grid-cols-2 gap-8 items-start">
+          {/* Kolom Kiri */}
+          <div className="space-y-3 text-[12px] print:text-[11.5px]">
+            {/* Baris Nomor, Lampiran, Perihal */}
+            <div className="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <div className="flex">
+                <span className="w-20 font-semibold text-slate-600">Nomor</span>
+                <span className="w-4">:</span>
+                <span className="font-bold text-slate-900">{currentNomorSurat || '-'}</span>
+              </div>
+              <div className="flex">
+                <span className="w-20 font-semibold text-slate-600">Lampiran</span>
+                <span className="w-4">:</span>
+                <span>-</span>
+              </div>
+              <div className="flex">
+                <span className="w-20 font-semibold text-slate-600">Perihal</span>
+                <span className="w-4">:</span>
+                <span className="font-black text-red-700 underline uppercase">{currentHalSurat}</span>
+              </div>
+            </div>
+
+            {/* Kepada Yth */}
+            <div className="pt-1">
+              <p className="text-slate-600">Kepada Yth.</p>
+              <p className="font-bold text-slate-900 text-[13px]">{currentPenerima}</p>
+              <p className="text-slate-600">Di Tempat</p>
+            </div>
+
+            {/* Kotak Jadwal Pelaksanaan */}
+            <div className="border border-slate-900 rounded-lg p-3 bg-white space-y-2">
+              <div className="font-bold uppercase text-[11px] text-slate-900 border-b border-slate-200 pb-1">
+                Jadwal & Tempat Pertemuan:
+              </div>
+              <table className="w-full text-[12px] font-semibold">
+                <tbody>
+                  <tr>
+                    <td className="w-28 py-0.5 text-slate-600">Hari, Tanggal</td>
+                    <td className="w-3 py-0.5">:</td>
+                    <td className="py-0.5 text-slate-900 font-bold">{formatDateWithDay(date)}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-0.5 text-slate-600">Waktu / Jam</td>
+                    <td className="py-0.5">:</td>
+                    <td className="py-0.5 text-slate-900 font-bold">{time}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-0.5 text-slate-600 align-top">Tempat</td>
+                    <td className="py-0.5 align-top">:</td>
+                    <td className="py-0.5 text-slate-900 font-bold leading-tight">{location}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-0.5 text-slate-600 align-top">Acara</td>
+                    <td className="py-0.5 align-top">:</td>
+                    <td className="py-0.5 text-slate-900 font-bold leading-tight">{currentAcara}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              {undanganCatatan && (
+                <div className="pt-1 border-t border-slate-200 text-[10.5px] text-slate-700">
+                  <span className="font-bold text-slate-900">Catatan:</span> {undanganCatatan}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Kolom Kanan */}
+          <div className="space-y-3 text-[12px] print:text-[11.5px] flex flex-col justify-between h-full">
+            <div>
+              {/* Tanggal Surat */}
+              <div className="text-right font-semibold text-slate-700 mb-2">
+                Semarang, {formatDate(currentUndanganDate)}
+              </div>
+
+              {/* Isi Surat */}
+              <div className="text-justify leading-relaxed space-y-2">
+                <p className="font-bold">{currentSalamPembuka}</p>
+                <p className="whitespace-pre-line">{currentPengantar}</p>
+                <p className="whitespace-pre-line">{currentPenutup}</p>
+                <p className="font-bold">{currentSalamPenutup}</p>
+              </div>
+            </div>
+
+            {/* Tanda Tangan */}
+            <div className={`mt-6 pt-2 flex ${undanganSignatureMode === 'ketua-saja' ? 'justify-end' : 'justify-between'} text-center gap-4`}>
+              {undanganSignatureMode !== 'ketua-saja' && (
+                <div className="w-40 text-center">
+                  <p className="font-bold uppercase text-[11px]">
+                    {meetingType === 'rt' ? `Sekretaris RT ${profile.rtNumber}` : `Sekretaris PKK`}
+                  </p>
+                  <div className="h-14 print:h-12"></div>
+                  <p className="font-extrabold underline uppercase text-[11px]">{secretary}</p>
+                </div>
+              )}
+              <div className="w-52 text-center">
+                <p className="font-bold uppercase text-[11.5px] leading-tight">
+                  {meetingType === 'rt' ? `KETUA RT. ${profile.rtNumber} RW. ${profile.rwNumber}` : `KETUA PKK RT ${profile.rtNumber}`}
+                </p>
+                <p className="font-semibold uppercase text-[10.5px] leading-tight text-slate-700">
+                  {meetingType === 'rt' ? `KELURAHAN ${profile.kelurahan}` : `KEL. ${profile.kelurahan}`}
+                </p>
+                <div className="h-14 print:h-12"></div>
+                <p className="font-black underline uppercase text-[11.5px]">({leader})</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1075,6 +1230,38 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     </div>
                   </div>
                 </button>
+              </div>
+
+              {/* Orientasi Kertas Daftar Hadir */}
+              <div className="pt-2 border-t border-slate-200">
+                <label className="block text-[10px] font-bold text-slate-700 uppercase mb-1 flex items-center justify-between">
+                  <span>Orientasi Kertas Daftar Hadir:</span>
+                  <span className="text-[9px] text-slate-500 font-semibold">{daftarHadirOrientation === 'landscape' ? 'Landscape (A4 Melebar)' : 'Portrait (A4 Tegak)'}</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDaftarHadirOrientation('portrait')}
+                    className={`py-1.5 px-2 text-xs font-bold rounded-lg border text-center transition-all ${
+                      daftarHadirOrientation === 'portrait'
+                        ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    Portrait (A4 Tegak)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDaftarHadirOrientation('landscape')}
+                    className={`py-1.5 px-2 text-xs font-bold rounded-lg border text-center transition-all ${
+                      daftarHadirOrientation === 'landscape'
+                        ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    Landscape (A4 Melebar)
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -1714,57 +1901,135 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
           {/* Controls for Surat Undangan */}
           {docViewMode === 'undangan' && (
             <div className="space-y-4 pt-2">
-              <div className="p-3.5 bg-blue-50/80 border border-blue-200 rounded-xl space-y-2.5">
+              <div className="p-3.5 bg-blue-50/80 border border-blue-200 rounded-xl space-y-3">
                 <label className="block font-bold text-blue-900 uppercase text-[11px] flex items-center justify-between">
                   <span className="flex items-center space-x-1.5">
                     <FileText className="w-3.5 h-3.5 text-blue-700" />
-                    <span>Format Lembar Cetak Undangan</span>
+                    <span>Format & Orientasi Lembar Cetak Undangan</span>
                   </span>
                   <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[9px] font-extrabold uppercase">
-                    {undanganLayout === '1-halaman' ? '1 Lembar A4' : '2-in-1 Selebaran'}
+                    {undanganLayout === 'landscape-2in1' ? 'A4 Landscape 2-in-1' :
+                     undanganLayout === 'landscape-1' ? 'A4 Landscape 1 Surat' :
+                     undanganLayout === '1-halaman' ? 'A4 Portrait 1 Surat' : 'A4 Portrait 2-in-1'}
                   </span>
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setUndanganLayout('1-halaman')}
-                    className={`p-2.5 rounded-lg border text-left flex items-center space-x-2 transition-all ${
-                      undanganLayout === '1-halaman'
-                        ? 'bg-slate-900 border-slate-900 text-white font-bold shadow-xs'
-                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+                    onClick={() => setUndanganLayout('landscape-2in1')}
+                    className={`p-2.5 rounded-lg border text-left flex items-start space-x-2 transition-all ${
+                      undanganLayout === 'landscape-2in1'
+                        ? 'bg-blue-900 border-blue-900 text-white font-bold shadow-xs'
+                        : 'bg-white border-blue-200 text-slate-800 hover:bg-blue-100/50'
                     }`}
                   >
-                    <FileText className="w-4 h-4 shrink-0" />
+                    <Scissors className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold truncate">Surat Resmi A4</div>
-                      <div className={`text-[9px] ${undanganLayout === '1-halaman' ? 'text-slate-300' : 'text-slate-500'}`}>
-                        1 Surat Penuh
+                      <div className="text-xs font-bold flex items-center gap-1.5">
+                        <span>A4 Landscape 2-in-1</span>
+                        <span className="bg-emerald-500 text-white text-[8px] px-1 py-0.2 rounded font-extrabold uppercase">
+                          Rekomendasi
+                        </span>
+                      </div>
+                      <div className={`text-[9.5px] mt-0.5 leading-snug ${undanganLayout === 'landscape-2in1' ? 'text-blue-100' : 'text-slate-500'}`}>
+                        2 Undangan kiri & kanan. Anti-terpotong & hemat kertas.
                       </div>
                     </div>
                   </button>
+
                   <button
                     type="button"
-                    onClick={() => setUndanganLayout('2-in-1')}
-                    className={`p-2.5 rounded-lg border text-left flex items-center space-x-2 transition-all ${
-                      undanganLayout === '2-in-1'
-                        ? 'bg-slate-900 border-slate-900 text-white font-bold shadow-xs'
+                    onClick={() => setUndanganLayout('landscape-1')}
+                    className={`p-2.5 rounded-lg border text-left flex items-start space-x-2 transition-all ${
+                      undanganLayout === 'landscape-1'
+                        ? 'bg-blue-900 border-blue-900 text-white font-bold shadow-xs'
+                        : 'bg-white border-blue-200 text-slate-800 hover:bg-blue-100/50'
+                    }`}
+                  >
+                    <Layers className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold truncate">A4 Landscape 1 Surat</div>
+                      <div className={`text-[9.5px] mt-0.5 leading-snug ${undanganLayout === 'landscape-1' ? 'text-blue-100' : 'text-slate-500'}`}>
+                        1 Surat melebar horizontal. Tata letak luas & anti-terpotong.
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setUndanganLayout('1-halaman')}
+                    className={`p-2.5 rounded-lg border text-left flex items-start space-x-2 transition-all ${
+                      undanganLayout === '1-halaman'
+                        ? 'bg-blue-900 border-blue-900 text-white font-bold shadow-xs'
                         : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
-                    <Scissors className="w-4 h-4 shrink-0" />
+                    <FileText className="w-4 h-4 shrink-0 mt-0.5 text-slate-400" />
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold truncate">2-in-1 Selebaran</div>
-                      <div className={`text-[9px] ${undanganLayout === '2-in-1' ? 'text-slate-300' : 'text-slate-500'}`}>
-                        2 Undangan / Lembar
+                      <div className="text-xs font-bold truncate">A4 Portrait 1 Surat</div>
+                      <div className={`text-[9.5px] mt-0.5 leading-snug ${undanganLayout === '1-halaman' ? 'text-blue-100' : 'text-slate-500'}`}>
+                        1 Surat resmi tegak standar A4 (tinggi disesuaikan).
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setUndanganLayout('2-in-1')}
+                    className={`p-2.5 rounded-lg border text-left flex items-start space-x-2 transition-all ${
+                      undanganLayout === '2-in-1'
+                        ? 'bg-blue-900 border-blue-900 text-white font-bold shadow-xs'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Scissors className="w-4 h-4 shrink-0 mt-0.5 text-slate-400" />
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold truncate">A4 Portrait 2-in-1</div>
+                      <div className={`text-[9.5px] mt-0.5 leading-snug ${undanganLayout === '2-in-1' ? 'text-blue-100' : 'text-slate-500'}`}>
+                        2 Undangan vertikal (atas & bawah) potong tengah.
                       </div>
                     </div>
                   </button>
                 </div>
-                <p className="text-[10px] text-blue-800 leading-snug">
-                  {undanganLayout === '1-halaman' 
-                    ? 'Format surat resmi 1 lembar A4 lengkap dengan KOP Surat, rincian acara, dan tanda tangan Ketua & Sekretaris.'
-                    : 'Format selebaran hemat: mencetak 2 surat undangan berukuran presisi dalam 1 lembar kertas A4 dengan garis potong (cocok diedarkan ke warga).'}
-                </p>
+
+                {/* Model Tanda Tangan */}
+                <div className="pt-2 border-t border-blue-200/70">
+                  <label className="block font-bold text-blue-950 uppercase text-[10px] mb-1.5 flex items-center justify-between">
+                    <span>Model Tanda Tangan Surat Undangan:</span>
+                    <span className="text-[9px] font-normal text-blue-700">
+                      {undanganSignatureMode === 'ketua-saja' ? 'Format 1 TTD' : 'Format 2 TTD'}
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setUndanganSignatureMode('ketua-saja')}
+                      className={`py-1.5 px-2 rounded-lg border text-xs font-bold text-center transition-all ${
+                        undanganSignatureMode === 'ketua-saja'
+                          ? 'bg-blue-800 text-white border-blue-800 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                      }`}
+                    >
+                      Hanya Ketua RT (1 TTD)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setUndanganSignatureMode('ketua-sekretaris')}
+                      className={`py-1.5 px-2 rounded-lg border text-xs font-bold text-center transition-all ${
+                        undanganSignatureMode === 'ketua-sekretaris'
+                          ? 'bg-blue-800 text-white border-blue-800 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                      }`}
+                    >
+                      Ketua & Sekretaris (2 TTD)
+                    </button>
+                  </div>
+                  <p className="text-[9px] text-blue-800 mt-1">
+                    {undanganSignatureMode === 'ketua-saja'
+                      ? '✓ Format tunggal: tanda tangan Ketua RT/PKK di sisi kanan (sesuai lampiran baku RT).'
+                      : '✓ Format ganda: tanda tangan Sekretaris di sebelah kiri dan Ketua RT di sebelah kanan.'}
+                  </p>
+                </div>
               </div>
 
               {/* Sesuaikan Teks Template Undangan */}
@@ -1962,7 +2227,12 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         {/* ================================================================ */}
         {/* Printable Official Document Preview */}
         {/* ================================================================ */}
-        <div className="lg:col-span-2 bg-white p-8 sm:p-12 rounded-2xl border border-slate-200 shadow-sm text-slate-900 font-arial-narrow official-doc leading-relaxed">
+        <div className={`lg:col-span-2 bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm text-slate-900 font-arial-narrow official-doc leading-relaxed transition-all ${
+          (docViewMode === 'undangan' && (undanganLayout === 'landscape-2in1' || undanganLayout === 'landscape-1')) ||
+          (docViewMode === 'daftar-hadir' && daftarHadirOrientation === 'landscape')
+            ? 'landscape-doc max-w-[1100px] w-full mx-auto'
+            : 'max-w-4xl mx-auto'
+        }`}>
           
           {/* ================== VIEW 1: DAFTAR HADIR (FORMAT SILANG) ================== */}
           {docViewMode === 'daftar-hadir' && (
@@ -2616,22 +2886,46 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
           {/* ================== VIEW 3: SURAT UNDANGAN PERTEMUAN RUTIN (RT & PKK) ================== */}
           {docViewMode === 'undangan' && (
-            undanganLayout === '2-in-1' ? (
-              /* ================= 2-IN-1 FORMAT SELEBARAN POTONG DUA ================= */
+            undanganLayout === 'landscape-2in1' ? (
+              /* ================= 2-IN-1 A4 LANDSCAPE (BERDAMPINGAN KIRI-KANAN) ================= */
+              <div className="print-one-page text-slate-900 w-full">
+                <div className="grid grid-cols-2 gap-6 relative min-h-[175mm]">
+                  {/* Undangan 1 (Kiri) */}
+                  <div className="pr-4 border-r-2 border-dashed border-slate-300 print:border-slate-400 flex flex-col justify-between">
+                    {renderUndanganBody(true, true)}
+                  </div>
+
+                  {/* Undangan 2 (Kanan) */}
+                  <div className="pl-4 flex flex-col justify-between">
+                    {renderUndanganBody(true, true)}
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-2 border-t border-dashed border-slate-300 text-center text-slate-400 text-[10px] print:hidden">
+                  ✂ Lembar A4 Landscape ini menghasilkan 2 lembar undangan siap sebar setelah dipotong tengah ✂
+                </div>
+              </div>
+            ) : undanganLayout === 'landscape-1' ? (
+              /* ================= 1 LEMBAR PENUH A4 LANDSCAPE (MELEBAR) ================= */
+              <div className="print-one-page text-slate-900 w-full">
+                {renderUndanganLandscapeSingle()}
+              </div>
+            ) : undanganLayout === '2-in-1' ? (
+              /* ================= 2-IN-1 PORTRAIT (ATAS-BAWAH) ================= */
               <div className="space-y-4 print-one-page text-slate-900">
-                {renderUndanganBody(true)}
+                {renderUndanganBody(true, false)}
 
                 <div className="border-t-2 border-dashed border-slate-400 my-4 py-1 flex items-center justify-center space-x-2 text-slate-500 text-[10px] font-mono print:my-2">
                   <Scissors className="w-3.5 h-3.5 shrink-0" />
                   <span>✂ Potong / Gunting di sini (Format 2 Undangan Selebaran per Lembar A4) ✂</span>
                 </div>
 
-                {renderUndanganBody(true)}
+                {renderUndanganBody(true, false)}
               </div>
             ) : (
-              /* ================= 1 LEMBAR PENUH (SURAT RESMI A4) ================= */
+              /* ================= 1 LEMBAR PENUH A4 PORTRAIT ================= */
               <div className="print-one-page text-slate-900">
-                {renderUndanganBody(false)}
+                {renderUndanganBody(false, false)}
               </div>
             )
           )}

@@ -141,6 +141,11 @@ export interface SpkRecord {
   secondPartyName: string; // Typically Worker/Contractor
   workers: string[]; // List of workers
   isHonorGenerated?: boolean; // Flag to track if integration has been triggered
+  reportNumber?: string; // Nomor Laporan Pelaksanaan SPK oleh Sekretaris
+  reportDate?: string; // Tanggal Laporan Sekretaris
+  reportNotes?: string; // Catatan Hasil Fisik / Evaluasi Pelaksanaan
+  reportProgress?: number; // Persentase Progres (Default 100%)
+  reportSecretaryName?: string; // Nama Sekretaris Pelapor
 }
 
 export interface HonorReceiptItem {

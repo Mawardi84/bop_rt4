@@ -29,13 +29,16 @@ export async function downloadElementAsPdf(
       return false;
     }
 
+    // Check if target is landscape
+    const isLandscape = el.classList.contains('landscape-doc') || !!el.querySelector('.landscape-doc');
+
     // Render canvas from target DOM element using html2canvas-pro
     const canvas = await html2canvas(el, {
       scale: 2, // High DPI for clear text
       useCORS: true,
       logging: false,
       backgroundColor: '#ffffff',
-      windowWidth: 800,
+      windowWidth: isLandscape ? 1180 : 800,
       onclone: (clonedDoc) => {
         // Inject clean print styles into cloned document
         const style = clonedDoc.createElement('style');
@@ -90,8 +93,6 @@ export async function downloadElementAsPdf(
       }
     });
 
-    const isLandscape = el.classList.contains('landscape-doc');
-
     const imgData = canvas.toDataURL('image/jpeg', 0.98);
     const pdf = new jsPDF({
       orientation: isLandscape ? 'landscape' : 'portrait',
@@ -111,8 +112,8 @@ export async function downloadElementAsPdf(
     pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
     heightLeft -= pdfHeight;
 
-    // Multi-page document handling (buffer of 5mm to prevent stray blank pages)
-    while (heightLeft > 5) {
+    // Multi-page document handling (buffer of 8mm to prevent stray blank pages)
+    while (heightLeft > 8) {
       position = heightLeft - imgHeight;
       pdf.addPage();
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
@@ -129,12 +130,29 @@ export async function downloadElementAsPdf(
 }
 
 /**
- * Executes native window.print() with fallback iframe handling
+ * Executes native window.print() with fallback iframe handling and automatic orientation detection
  */
 export function executePrint(title?: string): void {
   const originalTitle = document.title;
   if (title) {
     document.title = title;
+  }
+
+  // Detect if visible printable document is landscape
+  const targetEl = document.querySelector('.official-doc, .document-sheet, .print-document, main');
+  const isLandscape = targetEl?.classList.contains('landscape-doc') || !!document.querySelector('.landscape-doc');
+
+  let dynamicStyle: HTMLStyleElement | null = null;
+  if (isLandscape) {
+    dynamicStyle = document.createElement('style');
+    dynamicStyle.id = 'dynamic-print-page-style';
+    dynamicStyle.innerHTML = `
+      @page {
+        size: A4 landscape !important;
+        margin: 8mm 12mm !important;
+      }
+    `;
+    document.head.appendChild(dynamicStyle);
   }
 
   try {
@@ -144,6 +162,11 @@ export function executePrint(title?: string): void {
     console.warn('Direct window.print encountered error, attempting popup fallback:', err);
     openCleanPrintWindow(undefined, title);
   } finally {
+    if (dynamicStyle) {
+      setTimeout(() => {
+        dynamicStyle?.remove();
+      }, 2000);
+    }
     if (title) {
       setTimeout(() => {
         document.title = originalTitle;
