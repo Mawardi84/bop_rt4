@@ -588,7 +588,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
     const kopRtSize = isCompact ? 'text-[13px] print:text-[12px]' : 'text-[16px] print:text-[15px]';
     const kopAddressSize = isCompact ? 'text-[7.5px] print:text-[7px]' : 'text-[9.5px] print:text-[8.5px]';
     const logoSize = isCompact ? 'w-14 h-14 print:w-14 print:h-14' : 'w-20 h-20 print:w-20 print:h-20';
-    const textSize = isCompact ? 'text-[10px] print:text-[9.5px]' : 'text-[12px] print:text-[11.5px]';
+    const textSize = 'text-[12px] print:text-[12px]';
     const spacingClass = isCompact ? 'space-y-1.5' : 'space-y-2.5';
     const tablePadding = isCompact ? 'py-0.5' : 'py-1';
     const ttdHeight = isCompact ? 'h-9 print:h-8' : 'h-14 print:h-12';
@@ -2719,44 +2719,42 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                 </div>
 
                 {/* Tabel Meta Pertemuan (Grid 2 Kolom Ringkas) */}
-                <table className={`w-full border-collapse border border-slate-900 leading-tight ${
-                  isCompact ? 'text-[10.5px] print:text-[9.5px] mb-2 print:mb-1' : 'text-[13px] print:text-[13px] mb-4 leading-relaxed'
-                }`}>
+                <table className="w-full border-collapse border border-slate-900 leading-tight text-[12px] print:text-[12px] mb-3">
                   <tbody>
                     <tr>
-                      <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2 w-28' : 'py-1.5 px-2.5 w-32'}`}>Hari / Tanggal</td>
-                      <td className={`border border-slate-900 font-semibold text-slate-900 ${isCompact ? 'py-0.5 px-2 w-[30%]' : 'py-1.5 px-2.5 w-[30%]'}`}>{formatDateWithDay(date)}</td>
-                      <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2 w-36' : 'py-1.5 px-2.5 w-40'}`}>Pimpinan Rapat</td>
-                      <td className={`border border-slate-900 font-semibold text-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>{leader}</td>
+                      <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5 w-32">Hari / Tanggal</td>
+                      <td className="border border-slate-900 font-semibold text-slate-900 py-1 px-2.5 w-[30%]">{formatDateWithDay(date)}</td>
+                      <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5 w-40">Pimpinan Rapat</td>
+                      <td className="border border-slate-900 font-semibold text-slate-900 py-1 px-2.5">{leader}</td>
                     </tr>
                     <tr>
-                      <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>Waktu / Pukul</td>
-                      <td className={`border border-slate-900 text-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>{time}</td>
-                      <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>Notulis / Sekretaris</td>
-                      <td className={`border border-slate-900 font-semibold text-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>{secretary}</td>
+                      <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5">Waktu / Pukul</td>
+                      <td className="border border-slate-900 text-slate-900 py-1 px-2.5">{time}</td>
+                      <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5">Notulis / Sekretaris</td>
+                      <td className="border border-slate-900 font-semibold text-slate-900 py-1 px-2.5">{secretary}</td>
                     </tr>
                     <tr>
-                      <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2 w-28' : 'py-1.5 px-2.5 w-32'}`}>Tempat</td>
+                      <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5 w-32">Tempat</td>
                       {includePesertaInNotulen ? (
                         <>
-                          <td className={`border border-slate-900 text-slate-900 ${isCompact ? 'py-0.5 px-2 w-[30%]' : 'py-1.5 px-2.5 w-[30%]'}`}>{location}</td>
+                          <td className="border border-slate-900 text-slate-900 py-1 px-2.5 w-[30%]">{location}</td>
                           {meetingType === 'pkk' ? (
                             <td colSpan={2} className="border border-slate-900 p-0 align-top">
-                              <table className="w-full h-full">
+                              <table className="w-full h-full text-[12px] print:text-[12px]">
                                 <tbody>
                                   <tr>
-                                    <td className={`font-bold bg-slate-100 border-b border-r border-slate-900 ${isCompact ? 'py-0.5 px-2 w-36' : 'py-1 px-2.5 w-40'}`}>Jumlah Diundang</td>
-                                    <td className={`text-slate-900 border-b border-slate-900 font-bold ${isCompact ? 'py-0.5 px-2' : 'py-1 px-2.5'}`}>{invitedCount} Orang</td>
+                                    <td className="font-bold bg-slate-100 border-b border-r border-slate-900 py-1 px-2.5 w-40">Jumlah Diundang</td>
+                                    <td className="text-slate-900 border-b border-slate-900 font-bold py-1 px-2.5">{invitedCount} Orang</td>
                                   </tr>
                                   <tr>
-                                    <td className={`font-bold bg-slate-100 border-b border-r border-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1 px-2.5'}`}>Peserta Hadir</td>
-                                    <td className={`text-slate-900 border-b border-slate-900 font-bold ${isCompact ? 'py-0.5 px-2' : 'py-1 px-2.5'}`}>{participantCount} Orang</td>
+                                    <td className="font-bold bg-slate-100 border-b border-r border-slate-900 py-1 px-2.5">Peserta Hadir</td>
+                                    <td className="text-slate-900 border-b border-slate-900 font-bold py-1 px-2.5">{participantCount} Orang</td>
                                   </tr>
                                   <tr>
-                                    <td className={`font-bold bg-slate-100 border-r border-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1 px-2.5'}`}>Tidak Hadir</td>
-                                    <td className={`text-slate-900 font-bold ${isCompact ? 'py-0.5 px-2' : 'py-1 px-2.5'}`}>
+                                    <td className="font-bold bg-slate-100 border-r border-slate-900 py-1 px-2.5">Tidak Hadir</td>
+                                    <td className="text-slate-900 font-bold py-1 px-2.5">
                                       {Math.max(0, invitedCount - participantCount)} Orang
-                                      {absentNames && <span className="font-normal block mt-0.5 text-xs">({absentNames})</span>}
+                                      {absentNames && <span className="font-normal block mt-0.5 text-[11px]">({absentNames})</span>}
                                     </td>
                                   </tr>
                                 </tbody>
@@ -2764,36 +2762,32 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                             </td>
                           ) : (
                             <>
-                              <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2 w-36' : 'py-1.5 px-2.5 w-40'}`}>Peserta Hadir</td>
-                              <td className={`border border-slate-900 font-bold text-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>{participantCount} Orang (Daftar Hadir Terlampir)</td>
+                              <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5 w-40">Peserta Hadir</td>
+                              <td className="border border-slate-900 font-bold text-slate-900 py-1 px-2.5">{participantCount} Orang (Daftar Hadir Terlampir)</td>
                             </>
                           )}
                         </>
                       ) : (
-                        <td colSpan={3} className={`border border-slate-900 text-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>{location}</td>
+                        <td colSpan={3} className="border border-slate-900 text-slate-900 py-1 px-2.5">{location}</td>
                       )}
                     </tr>
                     <tr>
-                      <td className={`border border-slate-900 font-bold bg-slate-100 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>Agenda Rapat</td>
-                      <td colSpan={3} className={`border border-slate-900 font-bold text-slate-900 ${isCompact ? 'py-0.5 px-2' : 'py-1.5 px-2.5'}`}>{agendaSummary}</td>
+                      <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5">Agenda Rapat</td>
+                      <td colSpan={3} className="border border-slate-900 font-bold text-slate-900 py-1 px-2.5">{agendaSummary}</td>
                     </tr>
                   </tbody>
                 </table>
 
-                {/* I. Susunan Acara Rapat (Kompak 2 Kolom) */}
-                <div className={isCompact ? 'mb-2 print:mb-1' : 'mb-4'}>
-                  <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
-                    isCompact ? 'text-[11px] print:text-[10px] py-0.5 px-2 border-l-2 mb-1' : 'text-sm print:text-sm py-1.5 px-2.5 border-l-4 mb-2'
-                  }`}>
+                {/* I. Susunan Acara Rapat */}
+                <div className="mb-3">
+                  <div className="font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 text-[12px] print:text-[12px] py-1 px-2.5 border-l-3 mb-1.5">
                     {!discussionNotes?.trim() && !decisions?.trim() 
                       ? 'Uraian Jalannya Acara'
                       : selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'I. Susunan Acara Pelaksanaan Kegiatan'
                         : 'I. Susunan Agenda / Acara Rapat'}
                   </div>
-                  <div className={`flex flex-col ${
-                    isCompact ? 'space-y-0.5 text-[10px] print:text-[9px] pl-2 leading-tight' : 'space-y-1.5 text-[13px] print:text-[13px] pl-3 leading-relaxed'
-                  } text-slate-800`}>
+                  <div className="flex flex-col space-y-1 text-[12px] print:text-[12px] pl-3 leading-relaxed text-slate-800">
                     {agendaItems.map((ag, i) => (
                       <div key={i} className="flex space-x-1.5">
                         <span className="font-bold text-slate-900">{i + 1}.</span>
@@ -2816,17 +2810,13 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
                 {/* II. Uraian Pembahasan / Jalannya Acara */}
                 {discussionNotes?.trim() && (
-                  <div className={isCompact ? 'mb-2 print:mb-1' : 'mb-4'}>
-                    <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
-                      isCompact ? 'text-[11px] print:text-[10px] py-0.5 px-2 border-l-2 mb-1' : 'text-sm print:text-sm py-1.5 px-2.5 border-l-4 mb-2'
-                    }`}>
+                  <div className="mb-3">
+                    <div className="font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 text-[12px] print:text-[12px] py-1 px-2.5 border-l-3 mb-1.5">
                       {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'II. Uraian Jalannya Acara & Pelaksanaan Kegiatan'
                         : 'II. Uraian Pembahasan & Diskusi Rapat'}
                     </div>
-                    <div className={`${
-                      isCompact ? 'text-[10.5px] print:text-[9.5px] p-2 leading-snug' : 'text-[13px] print:text-[13px] p-3 leading-relaxed'
-                    } text-justify whitespace-pre-line text-slate-900 border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
+                    <div className="text-[12px] print:text-[12px] p-2 leading-relaxed text-justify whitespace-pre-line text-slate-900 border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none">
                       {discussionNotes}
                     </div>
                   </div>
@@ -2834,41 +2824,31 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
                 {/* III. Hasil Keputusan / Kesepakatan Warga */}
                 {decisions?.trim() && (
-                  <div className={isCompact ? 'mb-2 print:mb-1' : 'mb-6'}>
-                    <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
-                      isCompact ? 'text-[11px] print:text-[10px] py-0.5 px-2 border-l-2 mb-1' : 'text-sm print:text-sm py-1.5 px-2.5 border-l-4 mb-2'
-                    }`}>
+                  <div className="mb-4">
+                    <div className="font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 text-[12px] print:text-[12px] py-1 px-2.5 border-l-3 mb-1.5">
                       {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'III. Hasil Pelaksanaan Kegiatan & Kesimpulan'
                         : 'III. Hasil Keputusan & Kesepakatan Warga'}
                     </div>
-                    <div className={`${
-                      isCompact ? 'text-[10.5px] print:text-[9.5px] p-2 leading-snug' : 'text-[13px] print:text-[13px] p-3 leading-relaxed'
-                    } text-justify whitespace-pre-line text-slate-900 font-medium border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
+                    <div className="text-[12px] print:text-[12px] p-2 leading-relaxed text-justify whitespace-pre-line text-slate-900 font-medium border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none">
                       {decisions}
                     </div>
                   </div>
                 )}
 
                 {closingSentence && (
-                  <div className={`${
-                    isCompact ? 'text-[10px] print:text-[9px] mb-2 print:mb-1' : 'text-[13px] print:text-[13px] mb-6'
-                  } text-slate-800 text-justify italic`}>
+                  <div className="text-[12px] print:text-[12px] mb-4 text-slate-800 text-justify italic">
                     {closingSentence}
                   </div>
                 )}
 
                 {/* Tanda Tangan Mengetahui */}
-                <div className={`${
-                  isCompact 
-                    ? 'mt-3 pt-1.5 print:mt-1.5 print:pt-1 text-[11px] print:text-[10px] gap-8' 
-                    : 'mt-8 pt-4 text-[13px] print:text-[13px] gap-12'
-                } grid grid-cols-2 text-center print-avoid-break`}>
+                <div className="mt-6 pt-2 text-[12px] print:text-[12px] grid grid-cols-2 text-center gap-8 print-avoid-break">
                   <div>
                     <p className="font-bold uppercase">
                       {meetingType === 'rt' ? `Notulis / Sekretaris RT ${profile.rtNumber}` : `Sekretaris PKK RT ${profile.rtNumber}`}
                     </p>
-                    <div className={isCompact ? 'h-14 print:h-11' : 'h-20 print:h-20'}></div>
+                    <div className="h-14 print:h-12"></div>
                     <p className="font-extrabold underline uppercase">{secretary}</p>
                   </div>
                   <div>
@@ -2876,7 +2856,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     <p className="font-bold uppercase">
                       {meetingType === 'rt' ? `Ketua RT ${profile.rtNumber}` : `Ketua PKK RT ${profile.rtNumber}`}
                     </p>
-                    <div className={isCompact ? 'h-14 print:h-11' : 'h-20 print:h-20'}></div>
+                    <div className="h-14 print:h-12"></div>
                     <p className="font-extrabold underline uppercase">{leader}</p>
                   </div>
                 </div>
