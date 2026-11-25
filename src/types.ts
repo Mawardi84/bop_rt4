@@ -168,4 +168,4 @@ export interface HonorReceipt {
   secondPartyName: string; // Bendahara RT
 }
 
-export type ActiveTab = 'dashboard' | 'ba-kesepakatan' | 'rap' | 'sptjm' | 'surat' | 'pengambilan' | 'transactions' | 'reports' | 'spj-bulanan' | 'notulen' | 'musyawarah' | 'spk' | 'honor-receipt' | 'settings';
+export type ActiveTab = 'dashboard' | 'master-crud' | 'ba-kesepakatan' | 'rap' | 'sptjm' | 'surat' | 'pengambilan' | 'transactions' | 'reports' | 'spj-bulanan' | 'notulen' | 'musyawarah' | 'spk' | 'honor-receipt' | 'settings';

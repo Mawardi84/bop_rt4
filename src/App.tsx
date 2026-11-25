@@ -20,6 +20,7 @@ import { BaKesepakatanManager } from './components/BaKesepakatanManager';
 import { SptjmGenerator } from './components/SptjmGenerator';
 import { SpkGenerator } from './components/SpkGenerator';
 import { HonorReceiptGenerator } from './components/HonorReceiptGenerator';
+import { MasterCrudManager } from './components/MasterCrudManager';
 import { LoginHeroLanding } from './components/LoginHeroLanding';
 
 export default function App() {
@@ -467,6 +468,25 @@ export default function App() {
               setEditingTransaction(null);
               setIsAddModalOpen(true);
             }}
+          />
+        )}
+
+        {activeTab === 'master-crud' && (
+          <MasterCrudManager
+            profile={profile}
+            transactions={transactions}
+            setTransactions={setTransactions}
+            spkRecords={spkRecords}
+            setSpkRecords={setSpkRecords}
+            honorReceipts={honorReceipts}
+            setHonorReceipts={setHonorReceipts}
+            rapItems={rapItems}
+            setRapItems={setRapItems}
+            musyawarahRecords={musyawarahRecords}
+            setMusyawarahRecords={setMusyawarahRecords}
+            spjRecords={spjRecords}
+            setSpjRecords={setSpjRecords}
+            categories={categories}
           />
         )}
 

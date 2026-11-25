@@ -778,6 +778,27 @@ Seluruh operasional kontingen RT 04 didukung anggaran BOP RT 04 TA 2026. Ibu Wal
     decisions: '1. Disepakati pelaksanaan kerja bakti pembuatan lubang biopori di wilayah RT 04 RW 04 Ngabean.\n2. Pembiayaan peralatan dan material dibebankan pada anggaran BOP RT 04 Tahun Anggaran 2026.\n3. Warga diimbau berpartisipasi aktif dalam perawatan lubang biopori di sekitar rumah masing-masing.'
   },
   {
+    id: 'notulen-bank-sampah-11oktober-2026',
+    month: 'Oktober',
+    date: '2026-10-11',
+    time: '15:30 - selesai',
+    location: 'Kediaman Ibu Tisnani Subandiyah',
+    participantCount: 35,
+    leader: 'M. WAKHID NURJANAH',
+    secretary: 'MUH ZAENUN',
+    agendaTitle: 'Rapat Koordinasi Bank Sampah RT 04 RW 04',
+    agendaItems: [
+      'Pembukaan oleh Pimpinan Rapat (Ketua RT 04 Bpk. M. WAKHID NURJANAH)',
+      'Pembukaan dan Arahan tentang Pentingnya Pengelolaan Bank Sampah di Lingkungan RT 04 / RW 04 Ngabean',
+      'Sosialisasi Tata Cara Pemilahan Sampah Organik dan Anorganik dari Rumah Tangga',
+      'Penentuan Jadwal Penimbangan, Pengumpulan, dan Penjualan Hasil Bank Sampah Secara Rutin',
+      'Pengelolaan Hasil Penjualan Sampah untuk Kas Sosial, Kebersihan, dan Tabungan Warga',
+      'Tanya Jawab, Masukan Warga, dan Penutup / Doa Bersama'
+    ],
+    discussionNotes: 'Rapat koordinasi Bank Sampah RT 04 / RW 04 Ngabean diselenggarakan pada hari Minggu, 11 Oktober 2026 pukul 15:30 WIB s.d. selesai bertempat di kediaman Ibu Tisnani Subandiyah. Rapat dihadiri oleh pengurus RT dan warga guna membahas pengaktifan kembali serta optimalisasi pengelolaan bank sampah mandiri di lingkungan RT 04.\n\nDalam rapat dibahas pentingnya kesadaran warga dalam memilah sampah rumah tangga (organik dan anorganik) serta penjadwalan penimbangan berkala untuk menjaga kebersihan dan memberikan nilai ekonomis bagi warga.',
+    decisions: '1. Warga sepakat mengaktifkan kembali dan mengelola Bank Sampah RT 04 secara rutin setiap bulan.\n2. Ibu Tisnani Subandiyah ditunjuk sebagai koordinator operasional Bank Sampah RT 04 didampingi pengurus PKK.\n3. Hasil penjualan sampah anorganik akan disetorkan ke kas sosial RT dan sebagian dikembalikan sebagai tabungan warga.'
+  },
+  {
     id: 'notulen-kerjabakti-toga-11oktober',
     month: 'Oktober',
     date: '2026-10-11',
@@ -1519,6 +1540,29 @@ export const pkkNotulenPresets: NotulenPreset[] = [
     ],
     discussionNotes: 'Rapat PKK bulan Oktober 2026 membahas persiapan Pengajian Akbar Hari Santri Nasional di Masjid Al-Ijabah serta informasi perencanaan anggaran BOP PKK sebesar Rp 3 juta.',
     decisions: 'Seluruh warga dan ibu-ibu PKK berpartisipasi dalam Pengajian Akbar Hari Santri Nasional tanggal 25 Oktober 2026.'
+  },
+  {
+    id: 'pkk-notulen-bank-sampah-11oktober-2026',
+    month: 'Oktober',
+    date: '2026-10-11',
+    time: '15:30 - selesai',
+    location: 'Kediaman Ibu Tisnani Subandiyah',
+    participantCount: 35,
+    invitedCount: 42,
+    leader: 'TISTANI SUBANDIYAH',
+    secretary: 'INDRIANAH',
+    agendaTitle: 'Rapat Koordinasi Bank Sampah PKK RT 04 RW 04',
+    agendaItems: [
+      'Rapat dibuka dengan bacaan basmallah, ucapan salam dan terima kasih atas kehadiran ibu-ibu PKK',
+      'Menyanyikan lagu Mars PKK dan membaca 10 program pokok PKK',
+      'Laporan keuangan bulanan PKK dan arisan',
+      'Rapat Koordinasi Pengelolaan & Penimbangan Bank Sampah PKK RT 04 / RW 04',
+      'Sosialisasi Pemanfaatan Anggaran BOP PKK Sebesar Rp 3.000.000 di Mana Bank Sampah Menjadi Salah Satu Program Bagiannya',
+      'Pengundian Arisan Uang & Barang',
+      'Penutup dengan bacaan hamdallah, ucapan salam dan terima kasih'
+    ],
+    discussionNotes: 'Rapat koordinasi Bank Sampah PKK RT 04 / RW 04 diselenggarakan pada hari Minggu, 11 Oktober 2026 pukul 15:30 WIB s.d. selesai bertempat di kediaman Ibu Tisnani Subandiyah. Dihadiri oleh pengurus dan anggota PKK RT 04.\n\nPembahasan utama mengenai pemanfaatan alokasi anggaran BOP khusus PKK sebesar Rp 3.000.000 dari Pemerintah Kota Semarang, di mana program pengembangan Bank Sampah merupakan salah satu program bagian dari dana BOP tersebut di samping kegiatan pemberdayaan lainnya.',
+    decisions: '1. Kader PKK dan warga sepakat mengalokasikan sebagian dana BOP PKK (dari total pagu Rp 3.000.000) untuk mendukung program pengembangan Bank Sampah RT 04.\n2. Ibu Tisnani Subandiyah selaku Ketua PKK bertindak sebagai penanggung jawab program.\n3. Hasil pengelolaan bank sampah dikelola secara transparan untuk kas sosial PKK dan tabungan warga.'
   }
 ];
 export const initialSpkRecords: SpkRecord[] = [

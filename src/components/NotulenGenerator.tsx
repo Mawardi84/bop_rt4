@@ -56,6 +56,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
           dp.id === 'notulen-karnaval-30agustus' ||
           dp.id === 'notulen-kerjabakti-toga-11oktober' ||
           dp.id === 'notulen-kerjabakti-biopori-1november' ||
+          dp.id === 'notulen-bank-sampah-11oktober-2026' ||
           dp.id === 'notulen-november' ||
           dp.id === 'notulen-oktober' ||
           dp.id === 'notulen-september'
@@ -72,7 +73,21 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
   const [pkkPresets, setPkkPresets] = useState<NotulenPreset[]>(() => {
     const saved = localStorage.getItem('pkkNotulenPresets');
-    return saved ? JSON.parse(saved) : pkkNotulenPresets;
+    if (!saved) return pkkNotulenPresets;
+    try {
+      const parsed: NotulenPreset[] = JSON.parse(saved);
+      pkkNotulenPresets.forEach(dp => {
+        const idx = parsed.findIndex(p => p.id === dp.id);
+        if (idx === -1) {
+          parsed.push(dp);
+        } else if (dp.id === 'pkk-notulen-bank-sampah-11oktober-2026' || dp.id === 'pkk-notulen-oktober') {
+          parsed[idx] = dp;
+        }
+      });
+      return parsed;
+    } catch {
+      return pkkNotulenPresets;
+    }
   });
 
   useEffect(() => {
@@ -317,16 +332,22 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
       setUndanganCatatan('1. Waktu pelaksanaan: Minggu, 11 Oktober 2026 pukul 07.00 WIB s/d selesai di Taman TOGA RT 04.\n2. Dimohon warga membawa peralatan kerja bakti seperlunya (cangkul, sabit, gunting dahan, ember, sapu lidi).\n3. Konsumsi makan & minum kerja bakti disediakan oleh panitia menggunakan alokasi dana BOP RT Tahun Anggaran 2026.');
     } else if (preset.id === 'notulen-kerjabakti-biopori-1november') {
       setUndanganCatatan('1. Waktu pelaksanaan: Minggu, 1 November 2026 mulai pukul 07.00 WIB s/d selesai.\n2. Titik kumpul: Depan Pos Ronda RT 04 / Balai Warga Ngabean.\n3. Area kegiatan: Lingkungan RT 04 RW 04 Ngabean Gunungpati (titik rawan genangan dan halaman warga).\n4. Dimohon warga membawa peralatan kerja bakti seperlunya (linggis, cangkul, sekop, ember).\n5. Konsumsi kerja bakti disediakan oleh panitia menggunakan alokasi dana BOP RT Tahun Anggaran 2026.');
+    } else if (preset.id === 'notulen-bank-sampah-11oktober-2026') {
+      setUndanganNomorCustom('014 / RT.04 / X / 2026');
+      setUndanganDateCustom('2026-10-04');
+      setUndanganHalCustom('Undangan Rapat Koordinasi Bank Sampah RT 04');
+      setUndanganAcaraCustom('Rapat Koordinasi Bank Sampah & Pengelolaan Sampah Mandiri');
+      setUndanganCatatan('1. Waktu pelaksanaan: Minggu, 11 Oktober 2026 pukul 15:30 WIB s/d selesai bertempat di kediaman Ibu Tisnani Subandiyah.\n2. Agenda: Pembahasan pengaktifan kembali dan tata cara pengelolaan Bank Sampah RT 04 / RW 04 Ngabean.\n3. Diharapkan kehadiran seluruh warga dan pengurus RT tepat waktu.');
+    } else if (preset.id === 'pkk-notulen-bank-sampah-11oktober-2026') {
+      setUndanganNomorCustom('014 / PKK-RT.04 / X / 2026');
+      setUndanganDateCustom('2026-10-04');
+      setUndanganHalCustom('Undangan Rapat Koordinasi Bank Sampah PKK');
+      setUndanganAcaraCustom('Rapat Koordinasi Bank Sampah PKK RT 04 / RW 04');
+      setUndanganCatatan('1. Waktu pelaksanaan: Minggu, 11 Oktober 2026 pukul 15:30 WIB s/d selesai bertempat di kediaman Ibu Tisnani Subandiyah.\n2. Agenda: Pembahasan pengelolaan Bank Sampah PKK dan pemilahan sampah rumah tangga.\n3. Diharapkan kehadiran seluruh ibu-ibu PKK tepat waktu.');
     } else {
       setUndanganCatatan('');
     }
-    // Reset custom letter overrides to show this preset's default values
-    setUndanganHalCustom('');
-    setUndanganAcaraCustom('');
-    setUndanganPengantarCustom('');
-    setUndanganPenutupCustom('');
-    setUndanganNomorCustom('');
-    setUndanganDateCustom('');
+    // Preserve custom letter overrides if set by preset
 
     if (preset.participantCount >= 50) {
       setTableLayoutMode('2-kolom-100');
@@ -588,7 +609,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
     const kopRtSize = isCompact ? 'text-[13px] print:text-[12px]' : 'text-[16px] print:text-[15px]';
     const kopAddressSize = isCompact ? 'text-[7.5px] print:text-[7px]' : 'text-[9.5px] print:text-[8.5px]';
     const logoSize = isCompact ? 'w-14 h-14 print:w-14 print:h-14' : 'w-20 h-20 print:w-20 print:h-20';
-    const textSize = 'text-[12px] print:text-[12px]';
+    const textSize = 'text-[13px] print:text-[13px]';
     const spacingClass = isCompact ? 'space-y-1.5' : 'space-y-2.5';
     const tablePadding = isCompact ? 'py-0.5' : 'py-1';
     const ttdHeight = isCompact ? 'h-9 print:h-8' : 'h-14 print:h-12';
@@ -795,7 +816,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
         {/* 2 Kolom Konten Landscape (Kiri: Detail & Jadwal, Kanan: Pengantar, Penutup, TTD) */}
         <div className="grid grid-cols-2 gap-8 items-start">
           {/* Kolom Kiri */}
-          <div className="space-y-3 text-[12px] print:text-[11.5px]">
+          <div className="space-y-3 text-[13px] print:text-[13px]">
             {/* Baris Nomor, Lampiran, Perihal */}
             <div className="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
               <div className="flex">
@@ -818,16 +839,16 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
             {/* Kepada Yth */}
             <div className="pt-1">
               <p className="text-slate-600">Kepada Yth.</p>
-              <p className="font-bold text-slate-900 text-[13px]">{currentPenerima}</p>
+              <p className="font-bold text-slate-900 text-[14px]">{currentPenerima}</p>
               <p className="text-slate-600">Di Tempat</p>
             </div>
 
             {/* Kotak Jadwal Pelaksanaan */}
             <div className="border border-slate-900 rounded-lg p-3 bg-white space-y-2">
-              <div className="font-bold uppercase text-[11px] text-slate-900 border-b border-slate-200 pb-1">
+              <div className="font-bold uppercase text-[12px] text-slate-900 border-b border-slate-200 pb-1">
                 Jadwal & Tempat Pertemuan:
               </div>
-              <table className="w-full text-[12px] font-semibold">
+              <table className="w-full text-[13px] print:text-[13px] font-semibold">
                 <tbody>
                   <tr>
                     <td className="w-28 py-0.5 text-slate-600">Hari, Tanggal</td>
@@ -853,7 +874,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
               </table>
 
               {undanganCatatan && (
-                <div className="pt-1 border-t border-slate-200 text-[10.5px] text-slate-700">
+                <div className="pt-1 border-t border-slate-200 text-[11px] text-slate-700">
                   <span className="font-bold text-slate-900">Catatan:</span> {undanganCatatan}
                 </div>
               )}
@@ -861,7 +882,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
           </div>
 
           {/* Kolom Kanan */}
-          <div className="space-y-3 text-[12px] print:text-[11.5px] flex flex-col justify-between h-full">
+          <div className="space-y-3 text-[13px] print:text-[13px] flex flex-col justify-between h-full">
             <div>
               {/* Tanggal Surat */}
               <div className="text-right font-semibold text-slate-700 mb-2">
@@ -2719,7 +2740,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                 </div>
 
                 {/* Tabel Meta Pertemuan (Grid 2 Kolom Ringkas) */}
-                <table className="w-full border-collapse border border-slate-900 leading-tight text-[12px] print:text-[12px] mb-3">
+                <table className={`w-full border-collapse border border-slate-900 leading-tight ${isCompact ? 'text-[11px] print:text-[11px] mb-2' : 'text-[13px] print:text-[13px] mb-3'}`}>
                   <tbody>
                     <tr>
                       <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5 w-32">Hari / Tanggal</td>
@@ -2740,7 +2761,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                           <td className="border border-slate-900 text-slate-900 py-1 px-2.5 w-[30%]">{location}</td>
                           {meetingType === 'pkk' ? (
                             <td colSpan={2} className="border border-slate-900 p-0 align-top">
-                              <table className="w-full h-full text-[12px] print:text-[12px]">
+                              <table className={`w-full h-full ${isCompact ? 'text-[11px] print:text-[11px]' : 'text-[13px] print:text-[13px]'}`}>
                                 <tbody>
                                   <tr>
                                     <td className="font-bold bg-slate-100 border-b border-r border-slate-900 py-1 px-2.5 w-40">Jumlah Diundang</td>
@@ -2779,15 +2800,17 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                 </table>
 
                 {/* I. Susunan Acara Rapat */}
-                <div className="mb-3">
-                  <div className="font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 text-[12px] print:text-[12px] py-1 px-2.5 border-l-3 mb-1.5">
+                <div className={isCompact ? 'mb-2' : 'mb-3'}>
+                  <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
+                    isCompact ? 'text-[11px] print:text-[11px] py-0.5 px-2 mb-1' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
+                  } border-l-3`}>
                     {!discussionNotes?.trim() && !decisions?.trim() 
                       ? 'Uraian Jalannya Acara'
                       : selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'I. Susunan Acara Pelaksanaan Kegiatan'
                         : 'I. Susunan Agenda / Acara Rapat'}
                   </div>
-                  <div className="flex flex-col space-y-1 text-[12px] print:text-[12px] pl-3 leading-relaxed text-slate-800">
+                  <div className={`flex flex-col ${isCompact ? 'space-y-0.5 text-[11px] print:text-[11px]' : 'space-y-1 text-[13px] print:text-[13px]'} pl-3 leading-relaxed text-slate-800`}>
                     {agendaItems.map((ag, i) => (
                       <div key={i} className="flex space-x-1.5">
                         <span className="font-bold text-slate-900">{i + 1}.</span>
@@ -2810,13 +2833,15 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
                 {/* II. Uraian Pembahasan / Jalannya Acara */}
                 {discussionNotes?.trim() && (
-                  <div className="mb-3">
-                    <div className="font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 text-[12px] print:text-[12px] py-1 px-2.5 border-l-3 mb-1.5">
+                  <div className={isCompact ? 'mb-2' : 'mb-3'}>
+                    <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
+                      isCompact ? 'text-[11px] print:text-[11px] py-0.5 px-2 mb-1' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
+                    } border-l-3`}>
                       {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'II. Uraian Jalannya Acara & Pelaksanaan Kegiatan'
                         : 'II. Uraian Pembahasan & Diskusi Rapat'}
                     </div>
-                    <div className="text-[12px] print:text-[12px] p-2 leading-relaxed text-justify whitespace-pre-line text-slate-900 border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none">
+                    <div className={`${isCompact ? 'text-[11px] print:text-[11px] p-1' : 'text-[13px] print:text-[13px] p-2'} leading-relaxed text-justify whitespace-pre-line text-slate-900 border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
                       {discussionNotes}
                     </div>
                   </div>
@@ -2824,26 +2849,29 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
                 {/* III. Hasil Keputusan / Kesepakatan Warga */}
                 {decisions?.trim() && (
-                  <div className="mb-4">
-                    <div className="font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 text-[12px] print:text-[12px] py-1 px-2.5 border-l-3 mb-1.5">
+                  <div className={isCompact ? 'mb-2.5' : 'mb-4'}>
+                    <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
+                      isCompact ? 'text-[11px] print:text-[11px] py-0.5 px-2 mb-1' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
+                    } border-l-3`}>
                       {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'III. Hasil Pelaksanaan Kegiatan & Kesimpulan'
                         : 'III. Hasil Keputusan & Kesepakatan Warga'}
                     </div>
-                    <div className="text-[12px] print:text-[12px] p-2 leading-relaxed text-justify whitespace-pre-line text-slate-900 font-medium border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none">
+                    <div className={`${isCompact ? 'text-[11px] print:text-[11px] p-1' : 'text-[13px] print:text-[13px] p-2'} leading-relaxed text-justify whitespace-pre-line text-slate-900 font-medium border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
                       {decisions}
                     </div>
                   </div>
                 )}
 
                 {closingSentence && (
-                  <div className="text-[12px] print:text-[12px] mb-4 text-slate-800 text-justify italic">
+                  <div className={`${isCompact ? 'text-[11px] print:text-[11px] mb-2' : 'text-[13px] print:text-[13px] mb-4'} text-slate-800 text-justify italic`}>
                     {closingSentence}
                   </div>
                 )}
 
+
                 {/* Tanda Tangan Mengetahui */}
-                <div className="mt-6 pt-2 text-[12px] print:text-[12px] grid grid-cols-2 text-center gap-8 print-avoid-break">
+                <div className="mt-6 pt-2 text-[13px] print:text-[13px] grid grid-cols-2 text-center gap-8 print-avoid-break">
                   <div>
                     <p className="font-bold uppercase">
                       {meetingType === 'rt' ? `Notulis / Sekretaris RT ${profile.rtNumber}` : `Sekretaris PKK RT ${profile.rtNumber}`}

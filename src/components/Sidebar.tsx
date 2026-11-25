@@ -17,7 +17,8 @@ import {
   ChevronRight,
   ExternalLink,
   Printer,
-  Briefcase
+  Briefcase,
+  Database
 } from 'lucide-react';
 import { isInIframe, openInNewTab } from '../utils/printHelper';
 
@@ -46,7 +47,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navGroups = [
     {
       title: 'Utama',
-      items: [{ id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard }],
+      items: [
+        { id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard },
+        { id: 'master-crud', label: 'Master Data & CRUD (Tahun)', icon: Database },
+      ],
     },
     {
       title: 'Perencanaan',
