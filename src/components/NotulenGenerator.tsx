@@ -222,6 +222,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
   // Notulen specific states: daftar peserta hadir tidak dicantumkan di lembar notulen (default: false)
   const [includePesertaInNotulen, setIncludePesertaInNotulen] = useState<boolean>(false);
   const [notulenDensity, setNotulenDensity] = useState<'pas-1-halaman' | 'standar'>('pas-1-halaman');
+  const [notulenTitleCustom, setNotulenTitleCustom] = useState<string>('');
 
   // Helper untuk mempersingkat uraian pembahasan dan hasil keputusan agar pas 1 halaman
   const handlePersingkatUraian = () => {
@@ -312,6 +313,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
     setDiscussionNotes(preset.discussionNotes);
     setDecisions(preset.decisions);
     setClosingSentence(type === 'pkk' ? 'Rapat PKK ditutup pukul 17.15 WIB dengan bacaan hamdallah, ucapan salam dan terimakasih.' : '');
+    setNotulenTitleCustom('');
     setAgendaSummary(
       preset.agendaTitle ||
       (preset.id === 'notulen-tirakatan-16agustus'
@@ -1357,6 +1359,19 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                     ? 'Daftar kehadiran tidak dicantumkan di lembar notulen (dikelola terpisah di lembar Daftar Hadir).'
                     : 'Jumlah kehadiran akan dicantumkan pada tabel meta notulen.'}
                 </p>
+              </div>
+
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+                <label className="block text-xs font-bold text-slate-800 uppercase">
+                  Ubah Judul Notulen (Kustom):
+                </label>
+                <input
+                  type="text"
+                  value={notulenTitleCustom}
+                  onChange={(e) => setNotulenTitleCustom(e.target.value)}
+                  placeholder="Kosongkan untuk judul default preset"
+                  className="w-full p-2 text-xs bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                />
               </div>
             </div>
           )}
@@ -2720,19 +2735,21 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                   <h1 className={`${
                     isCompact ? 'text-[13px] print:text-[11.5px]' : 'text-base print:text-base'
                   } font-black tracking-wide uppercase underline underline-offset-2 text-slate-900 leading-tight`}>
-                    {selectedPresetId === 'notulen-tirakatan-16agustus'
-                      ? 'BERITA ACARA & NOTULEN PELAKSANAAN MALAM TIRAKATAN HUT RI KE 81 TAHUN 2026'
-                      : selectedPresetId === 'notulen-resepsi-23agustus'
-                      ? 'BERITA ACARA & NOTULEN PELAKSANAAN MALAM RESEPSI HUT RI KE 81 TAHUN 2026'
-                      : selectedPresetId === 'notulen-karnaval-30agustus'
-                      ? 'BERITA ACARA & NOTULEN PELAKSANAAN KARNAVAL BUDAYA HUT RI KE 81 TAHUN 2026'
-                      : selectedPresetId === 'notulen-kerjabakti-toga-11oktober'
-                      ? `BERITA ACARA & NOTULEN PELAKSANAAN KERJA BAKTI TAMAN TOGA RT ${profile.rtNumber} RW ${profile.rwNumber} TAHUN 2026`
-                      : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
-                      ? `BERITA ACARA & NOTULEN PELAKSANAAN KERJA BAKTI PEMBUATAN LUBANG BIOPORI RT ${profile.rtNumber} RW ${profile.rwNumber} TAHUN 2026`
-                      : meetingType === 'rt' 
-                      ? `NOTULEN RAPAT RUTIN WARGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
-                      : `NOTULEN PERTEMUAN RUTIN PKK RT ${profile.rtNumber} RW ${profile.rwNumber}`}
+                    {notulenTitleCustom.trim() ? notulenTitleCustom : (
+                      selectedPresetId === 'notulen-tirakatan-16agustus'
+                        ? 'BERITA ACARA & NOTULEN PELAKSANAAN MALAM TIRAKATAN HUT RI KE 81 TAHUN 2026'
+                        : selectedPresetId === 'notulen-resepsi-23agustus'
+                        ? 'BERITA ACARA & NOTULEN PELAKSANAAN MALAM RESEPSI HUT RI KE 81 TAHUN 2026'
+                        : selectedPresetId === 'notulen-karnaval-30agustus'
+                        ? 'BERITA ACARA & NOTULEN PELAKSANAAN KARNAVAL BUDAYA HUT RI KE 81 TAHUN 2026'
+                        : selectedPresetId === 'notulen-kerjabakti-toga-11oktober'
+                        ? `BERITA ACARA & NOTULEN PELAKSANAAN KERJA BAKTI TAMAN TOGA RT ${profile.rtNumber} RW ${profile.rwNumber} TAHUN 2026`
+                        : selectedPresetId === 'notulen-kerjabakti-biopori-1november'
+                        ? `BERITA ACARA & NOTULEN PELAKSANAAN KERJA BAKTI PEMBUATAN LUBANG BIOPORI RT ${profile.rtNumber} RW ${profile.rwNumber} TAHUN 2026`
+                        : meetingType === 'rt' 
+                        ? `NOTULEN RAPAT RUTIN WARGA RT ${profile.rtNumber} RW ${profile.rwNumber}` 
+                        : `NOTULEN PERTEMUAN RUTIN PKK RT ${profile.rtNumber} RW ${profile.rwNumber}`
+                    )}
                   </h1>
                   <p className={`${isCompact ? 'text-[10px] print:text-[9px] mt-0.5' : 'text-xs print:text-xs mt-2'} font-bold uppercase text-slate-700`}>
                     Bulan {month} Tahun {profile.year}
@@ -2740,7 +2757,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                 </div>
 
                 {/* Tabel Meta Pertemuan (Grid 2 Kolom Ringkas) */}
-                <table className={`w-full border-collapse border border-slate-900 leading-tight ${isCompact ? 'text-[11px] print:text-[11px] mb-2' : 'text-[13px] print:text-[13px] mb-3'}`}>
+                <table className={`w-full border-collapse border border-slate-900 leading-tight ${isCompact ? 'text-[10px] print:text-[10px] mb-1.5' : 'text-[13px] print:text-[13px] mb-3'}`}>
                   <tbody>
                     <tr>
                       <td className="border border-slate-900 font-bold bg-slate-100 py-1 px-2.5 w-32">Hari / Tanggal</td>
@@ -2761,7 +2778,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                           <td className="border border-slate-900 text-slate-900 py-1 px-2.5 w-[30%]">{location}</td>
                           {meetingType === 'pkk' ? (
                             <td colSpan={2} className="border border-slate-900 p-0 align-top">
-                              <table className={`w-full h-full ${isCompact ? 'text-[11px] print:text-[11px]' : 'text-[13px] print:text-[13px]'}`}>
+                              <table className={`w-full h-full ${isCompact ? 'text-[10px] print:text-[10px]' : 'text-[13px] print:text-[13px]'}`}>
                                 <tbody>
                                   <tr>
                                     <td className="font-bold bg-slate-100 border-b border-r border-slate-900 py-1 px-2.5 w-40">Jumlah Diundang</td>
@@ -2800,9 +2817,9 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                 </table>
 
                 {/* I. Susunan Acara Rapat */}
-                <div className={isCompact ? 'mb-2' : 'mb-3'}>
+                <div className={isCompact ? 'mb-1.5' : 'mb-3'}>
                   <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
-                    isCompact ? 'text-[11px] print:text-[11px] py-0.5 px-2 mb-1' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
+                    isCompact ? 'text-[10px] print:text-[10px] py-0.5 px-2 mb-0.5' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
                   } border-l-3`}>
                     {!discussionNotes?.trim() && !decisions?.trim() 
                       ? 'Uraian Jalannya Acara'
@@ -2810,7 +2827,7 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
                         ? 'I. Susunan Acara Pelaksanaan Kegiatan'
                         : 'I. Susunan Agenda / Acara Rapat'}
                   </div>
-                  <div className={`flex flex-col ${isCompact ? 'space-y-0.5 text-[11px] print:text-[11px]' : 'space-y-1 text-[13px] print:text-[13px]'} pl-3 leading-relaxed text-slate-800`}>
+                  <div className={`flex flex-col ${isCompact ? 'space-y-0.5 text-[10px] print:text-[10px]' : 'space-y-1 text-[13px] print:text-[13px]'} pl-3 leading-relaxed text-slate-800`}>
                     {agendaItems.map((ag, i) => (
                       <div key={i} className="flex space-x-1.5">
                         <span className="font-bold text-slate-900">{i + 1}.</span>
@@ -2833,15 +2850,15 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
                 {/* II. Uraian Pembahasan / Jalannya Acara */}
                 {discussionNotes?.trim() && (
-                  <div className={isCompact ? 'mb-2' : 'mb-3'}>
+                  <div className={isCompact ? 'mb-1.5' : 'mb-3'}>
                     <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
-                      isCompact ? 'text-[11px] print:text-[11px] py-0.5 px-2 mb-1' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
+                      isCompact ? 'text-[10px] print:text-[10px] py-0.5 px-2 mb-0.5' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
                     } border-l-3`}>
                       {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'II. Uraian Jalannya Acara & Pelaksanaan Kegiatan'
                         : 'II. Uraian Pembahasan & Diskusi Rapat'}
                     </div>
-                    <div className={`${isCompact ? 'text-[11px] print:text-[11px] p-1' : 'text-[13px] print:text-[13px] p-2'} leading-relaxed text-justify whitespace-pre-line text-slate-900 border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
+                    <div className={`${isCompact ? 'text-[10px] print:text-[10px] p-0.5' : 'text-[13px] print:text-[13px] p-2'} leading-relaxed text-justify whitespace-pre-line text-slate-900 border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
                       {discussionNotes}
                     </div>
                   </div>
@@ -2849,25 +2866,26 @@ export const NotulenGenerator: React.FC<NotulenGeneratorProps> = ({ profile }) =
 
                 {/* III. Hasil Keputusan / Kesepakatan Warga */}
                 {decisions?.trim() && (
-                  <div className={isCompact ? 'mb-2.5' : 'mb-4'}>
+                  <div className={isCompact ? 'mb-2' : 'mb-4'}>
                     <div className={`font-bold uppercase bg-slate-100 border-slate-900 text-slate-900 ${
-                      isCompact ? 'text-[11px] print:text-[11px] py-0.5 px-2 mb-1' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
+                      isCompact ? 'text-[10px] print:text-[10px] py-0.5 px-2 mb-0.5' : 'text-[13px] print:text-[13px] py-1 px-2.5 mb-1.5'
                     } border-l-3`}>
                       {selectedPresetId === 'notulen-tirakatan-16agustus' || selectedPresetId === 'notulen-resepsi-23agustus' || selectedPresetId === 'notulen-karnaval-30agustus' || selectedPresetId === 'notulen-kerjabakti-toga-11oktober' || selectedPresetId === 'notulen-kerjabakti-biopori-1november'
                         ? 'III. Hasil Pelaksanaan Kegiatan & Kesimpulan'
                         : 'III. Hasil Keputusan & Kesepakatan Warga'}
                     </div>
-                    <div className={`${isCompact ? 'text-[11px] print:text-[11px] p-1' : 'text-[13px] print:text-[13px] p-2'} leading-relaxed text-justify whitespace-pre-line text-slate-900 font-medium border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
+                    <div className={`${isCompact ? 'text-[10px] print:text-[10px] p-0.5' : 'text-[13px] print:text-[13px] p-2'} leading-relaxed text-justify whitespace-pre-line text-slate-900 font-medium border border-slate-300 rounded bg-slate-50/40 print:bg-transparent print:p-0 print:border-none`}>
                       {decisions}
                     </div>
                   </div>
                 )}
 
                 {closingSentence && (
-                  <div className={`${isCompact ? 'text-[11px] print:text-[11px] mb-2' : 'text-[13px] print:text-[13px] mb-4'} text-slate-800 text-justify italic`}>
+                  <div className={`${isCompact ? 'text-[10px] print:text-[10px] mb-1.5' : 'text-[13px] print:text-[13px] mb-4'} text-slate-800 text-justify italic`}>
                     {closingSentence}
                   </div>
                 )}
+
 
 
                 {/* Tanda Tangan Mengetahui */}
